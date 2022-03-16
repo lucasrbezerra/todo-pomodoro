@@ -1,4 +1,6 @@
 # todo-pomorodo
 
 ## Run Project
-# yarn dev
+1. Clone project
+2. yarn install
+3. yarn dev
