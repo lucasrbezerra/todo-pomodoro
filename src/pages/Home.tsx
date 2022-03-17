@@ -94,52 +94,68 @@ export const Home = () => {
     switch (stage) {
       case 0:
         return (
-          <Button
-            width="200px"
-            height="50px"
-            label="Iniciar"
-            m="3rem 0 0 150px"
-            bg={`${theme.colors.primary}`}
-            onClick={handleStartTimer}
-          />
+          <Content width="100%" mt="3.5rem" justifyContent="center" alignItems="center" display="flex">
+            <Button
+              width="200px"
+              height="50px"
+              label="Iniciar"
+              mIcon="0 .35rem 0 0"
+              bg={`${theme.colors.primary}`}
+              onClick={handleStartTimer}
+            />
+          </Content>
         );
 
       case 1:
         return (
-          <Button
-            width="200px"
-            height="50px"
-            label="Desistir"
-            icon="fas fa-ban"
-            m="3rem 0 0 150px"
-            bg={`${theme.colors.failure}`}
-            onClick={resetCountdown}
-          />
+          <Content width="100%" mt="3.5rem" justifyContent="center" alignItems="center" display="flex">
+            <Button
+              width="200px"
+              height="50px"
+              label="Desistir"
+              icon="fas fa-ban"
+              mIcon="0 .35rem 0 0"
+              bg={`${theme.colors.failure}`}
+              onClick={resetCountdown}
+            />
+          </Content>
         );
 
       case 2:
         return (
-          <Button
-            width="200px"
-            height="50px"
-            label="Pronto!"
-            icon="far fa-check-circle"
-            m="3rem 0 0 150px"
-            bg={`${theme.colors.success}`}
-            onClick={handleDone}
-          />
+          <Content width="100%" mt="3.5rem" justifyContent="center" alignItems="center" display="flex">
+            <Button
+              width="200px"
+              height="50px"
+              label="Pronto!"
+              mIcon="0 .35rem 0 0"
+              icon="far fa-check-circle"
+              bg={`${theme.colors.success}`}
+              onClick={handleDone}
+            />
+            <Button
+              width="120px"
+              height="30px"
+              label="Repita!"
+              mIcon="0 .35rem 0 0"
+              icon="fas fa-redo"
+              bg={`${theme.colors.failure}`}
+              onClick={resetCountdown}
+            />
+          </Content>
         );
 
       default:
         return (
-          <Button
-            width="200px"
-            height="50px"
-            label="Iniciar"
-            m="3rem 0 0 150px"
-            bg={`${theme.colors.primary}`}
-            onClick={handleStartTimer}
-          />
+          <Content width="100%" mt="3.5rem" justifyContent="center" alignItems="center" display="flex">
+            <Button
+              width="200px"
+              height="50px"
+              label="Iniciar"
+              bg={`${theme.colors.primary}`}
+              onClick={handleStartTimer}
+            />
+          </Content>
         );
     }
   }, [handleStartTimer, handleDone, resetCountdown, stage]);
@@ -178,6 +194,7 @@ export const Home = () => {
           <Title>Tarefas</Title>
           <Content display="flex" alignItems="center" p="1rem 0 1.5rem 0">
             <Input
+              autoFocus
               placeholder="Entre com uma tarefa nova..."
               error={error}
               value={taskName}

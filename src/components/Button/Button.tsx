@@ -31,6 +31,7 @@ export type ButtonProps = {
   label?: string;
   icon?: string;
   width: string;
+  mIcon?: string;
   m?: string;
   bg?: string;
   height: string;
@@ -39,10 +40,10 @@ export type ButtonProps = {
   onClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
 };
 
-export const Button: React.FC<ButtonProps> = ({ label, width, height, icon, bg, m, onClick }) => {
+export const Button: React.FC<ButtonProps> = ({ label, width, height, icon, bg, m, mIcon, onClick }) => {
   return (
     <CustomButton width={width} height={height} bg={bg} m={m} onClick={onClick}>
-      {icon && <Icon variant={icon} fontSize="1rem" />}
+      {icon && <Icon variant={icon} fontSize="1rem" mIcon={mIcon}/>}
       <Text ml="4px">{label}</Text>
     </CustomButton>
   );

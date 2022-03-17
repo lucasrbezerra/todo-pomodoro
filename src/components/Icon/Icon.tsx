@@ -8,6 +8,7 @@ interface IIconProps {
   top?: string | null;
   color?: any;
   fontSize?: string | null;
+  m?: string | null;
   onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
@@ -31,15 +32,17 @@ type IconProps = {
   top?: string | null;
   color?: string | null;
   fontSize?: string | null;
+  mIcon?: string | null;
   onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
 };
 
-export const Icon: React.FC<IconProps> = ({ variant, position, right, left, color, top, fontSize, onClick }) => {
+export const Icon: React.FC<IconProps> = ({ variant, position, right, left, color, top, fontSize, mIcon = '0px', onClick }) => {
   return (
     <CustomIcon
       className={variant}
       position={position}
       left={left}
+      m={mIcon}
       right={right}
       top={top}
       color={color}

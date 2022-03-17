@@ -8,6 +8,7 @@ type InputProps = {
   position?: string | null;
   borderColor?: string;
   border: string;
+  autoFocus: boolean;
 };
 
 const CustomInput = styled.input<InputProps>`
@@ -29,6 +30,7 @@ const CustomInput = styled.input<InputProps>`
 
 interface IInputProps {
   placeholder: string;
+  autoFocus: boolean;
   error: Boolean;
   value: string;
   onChange: (value: React.ChangeEvent<HTMLInputElement>) => void;
@@ -46,12 +48,13 @@ export const Input: React.FC<IInputProps> = ({
   onClick,
   onKeyDown,
   icon = true,
-  width = "80%"
+  width = '80%',
 }) => {
   const theme = useTheme() as ThemeType;
   return (
     <Content width={width} m="0 8px 0 0" height="40px" position="relative">
       <CustomInput
+        autoFocus={true}
         placeholder={placeholder}
         position="absolute"
         value={value}

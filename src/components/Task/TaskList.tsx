@@ -78,8 +78,8 @@ export const TaskList: React.FC<TaskListProps> = ({ tasks, deleteTask, editTask 
       {tasks.map((task, index) => (
         <Task key={index} {...task} width="450px" m="1rem auto">
           <Content display="flex" position="absolute" right="16px">
-            <Button width="35px" height="35px" icon="fas fa-pen" onClick={() => handleEdit(task)} />
-            <Button width="35px" height="35px" icon="fas fa-trash" onClick={() => handleDelete(task)} />
+            <Button width="35px" height="35px" mIcon="0 0 0 .25rem" icon="fas fa-pen" onClick={() => handleEdit(task)} />
+            <Button width="35px" height="35px" mIcon="0 0 0 .25rem" icon="fas fa-trash" onClick={() => handleDelete(task)} />
           </Content>
         </Task>
       ))}
@@ -97,6 +97,7 @@ export const TaskList: React.FC<TaskListProps> = ({ tasks, deleteTask, editTask 
           ) : (
             <Content width="250px">
               <Input
+                autoFocus
                 placeholder="Entre com uma tarefa nova..."
                 error={error}
                 value={taskName}
