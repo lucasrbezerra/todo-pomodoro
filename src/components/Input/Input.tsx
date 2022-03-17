@@ -32,14 +32,25 @@ interface IInputProps {
   error: Boolean;
   value: string;
   onChange: (value: React.ChangeEvent<HTMLInputElement>) => void;
-  onClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
   onKeyDown: (event: React.KeyboardEvent<HTMLDivElement>) => void;
+  icon?: boolean;
+  width?: string;
 }
 
-export const Input: React.FC<IInputProps> = ({ placeholder, value, error, onChange, onClick, onKeyDown }) => {
+export const Input: React.FC<IInputProps> = ({
+  placeholder,
+  value,
+  error,
+  onChange,
+  onClick,
+  onKeyDown,
+  icon = true,
+  width = "80%"
+}) => {
   const theme = useTheme() as ThemeType;
   return (
-    <Content width="80%" m="0 8px 0 0" height="40px" position="relative">
+    <Content width={width} m="0 8px 0 0" height="40px" position="relative">
       <CustomInput
         placeholder={placeholder}
         position="absolute"
@@ -48,15 +59,17 @@ export const Input: React.FC<IInputProps> = ({ placeholder, value, error, onChan
         onKeyDown={onKeyDown}
         border={error ? `1px solid ${theme.colors.failure}` : `1px solid ${theme.colors.light}`}
       />
-      <Icon
-        variant="fas fa-plus-square"
-        position="absolute"
-        right="18px"
-        top=".5rem"
-        color="primary"
-        fontSize="1.5rem"
-        onClick={onClick}
-      />
+      {icon && (
+        <Icon
+          variant="fas fa-plus-square"
+          position="absolute"
+          right="18px"
+          top=".5rem"
+          color="primary"
+          fontSize="1.5rem"
+          onClick={onClick}
+        />
+      )}
     </Content>
   );
 };

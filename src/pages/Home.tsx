@@ -20,7 +20,7 @@ export const Home = () => {
 
   const [taskName, setTaskName] = useState('');
   const [error, setError] = useState(false);
-  const { tasks, currentTask, createTask, jumpTask } = useTasks();
+  const { tasks, currentTask, createTask, jumpTask, deleteTask, editTask } = useTasks();
   const theme = useTheme() as ThemeType;
 
   const minutes = Math.floor(time / 60);
@@ -89,14 +89,6 @@ export const Home = () => {
   const handleDone = () => {
     resetCountdown();
   };
-
-  // const handleEdit = useCallback((taskId: number) => {
-  //   editTask(taskId)
-  // }, []);
-
-  // const handleDelete = useCallback((taskId: number) => {
-  //   deleteTask(taskId);
-  // }, []);
 
   const handleStageButtons = useMemo(() => {
     switch (stage) {
@@ -196,7 +188,7 @@ export const Home = () => {
             <Button width="100px" height="40px" label="Limpar" onClick={handleCleanAll} />
           </Content>
         </Content>
-        <TaskList tasks={tasks} />
+        <TaskList tasks={tasks} deleteTask={deleteTask} editTask={editTask} />
       </Box>
     </Container>
   );
