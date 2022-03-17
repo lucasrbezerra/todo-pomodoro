@@ -1,6 +1,8 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { Text, Title, Container, Box, Timer, Task, TaskList, Button, Content, Subtitle, Input } from '../components';
+import { useEffect, useMemo, useState } from 'react';
+import { Text, Title, Container, Box, Timer, Task, TaskList, Button, Content, Subtitle, Input, Modal, ConfirmationModal } from '../components';
 import { useTasks } from '../hooks';
+import { useModal } from '../hooks';
+
 import { useTheme } from 'styled-components';
 import { ThemeType } from '../themes';
 
@@ -20,7 +22,8 @@ export const Home = () => {
 
   const [taskName, setTaskName] = useState('');
   const [error, setError] = useState(false);
-  const { tasks, currentTask, createTask, jumpTask, deleteTask, editTask } = useTasks();
+  const { tasks, currentTask, createTask, jumpTask, deleteTask, editTask, clearTasks } = useTasks();
+  const { toggle, isShown} = useModal();
   const theme = useTheme() as ThemeType;
 
   const minutes = Math.floor(time / 60);
@@ -74,7 +77,8 @@ export const Home = () => {
   };
 
   const handleCleanAll = () => {
-    console.log('Clear All');
+    clearTasks();
+    toggle();
   };
 
   const handleAddTask = () => {
@@ -202,11 +206,23 @@ export const Home = () => {
               onClick={handleAddTask}
               onKeyDown={onKeyDown}
             />
-            <Button width="100px" height="40px" label="Limpar" onClick={handleCleanAll} />
+            <Button width="100px" height="40px" label="Limpar" onClick={() => toggle()} />
           </Content>
         </Content>
         <TaskList tasks={tasks} deleteTask={deleteTask} editTask={editTask} />
       </Box>
+      <Modal
+        isShown={isShown}
+        hide={toggle}
+        headerText="Deletar Todas Tarefas"
+        modalContent={
+          <ConfirmationModal
+            onConfirm={handleCleanAll}
+            onCancel={() => toggle()}
+            message="Tem certeza que quer deletar TODAS as tarefa?"
+          />
+        }
+      />
     </Container>
   );
 };

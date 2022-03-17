@@ -21,6 +21,10 @@ export const useTasks = () => {
     setTasks([...tasks, newTask]);
   };
 
+  const clearTasks = () => {
+    setTasks([]);
+  }
+
   const jumpTask = () => {
     let auxTasks = [...tasks];
     auxTasks.reverse();
@@ -48,5 +52,5 @@ export const useTasks = () => {
     setTasks(auxTasks);
   };
 
-  return { tasks, currentTask, createTask, jumpTask, deleteTask, editTask };
+  return { tasks, currentTask, createTask, jumpTask, deleteTask, editTask, clearTasks };
 };
