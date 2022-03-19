@@ -4,6 +4,7 @@ import { space, color } from 'styled-system';
 interface ITextProps {
   ml?: string | null;
   mt?: string | null;
+  p?: string | null;
   color?: string | null;
 }
 

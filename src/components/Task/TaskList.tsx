@@ -5,6 +5,8 @@ import { useState } from 'react';
 
 type TaskListProps = {
   tasks: ITask[];
+  currentTask: ITask;
+  resetCountdown: () => void;
   deleteTask: (taskId: number) => void;
   editTask: (taskId: number, isDone: boolean, newTask: string) => void;
 };
@@ -14,7 +16,7 @@ const MODAL_TYPE = {
   EDIT: 'edit',
 };
 
-export const TaskList: React.FC<TaskListProps> = ({ tasks, deleteTask, editTask }) => {
+export const TaskList: React.FC<TaskListProps> = ({ tasks, currentTask, deleteTask, editTask, resetCountdown }) => {
   const [selectedTask, setSelectedTask] = useState<ITask | any>();
   const [error, setError] = useState(false);
   const [taskName, setTaskName] = useState<string>('');
@@ -63,9 +65,12 @@ export const TaskList: React.FC<TaskListProps> = ({ tasks, deleteTask, editTask 
 
   const onConfirmDelete = () => {
     deleteTask(selectedTask.id);
+    if (selectedTask.id === currentTask.id) {
+      resetCountdown();
+    }
     toggle();
   };
-  
+
   const onCancelDelete = () => toggle();
 
   const handleDelete = (task: ITask) => {

@@ -12,6 +12,7 @@ import {
   Subtitle,
   Input,
   Modal,
+  Image,
   ConfirmationModal,
 } from '../components';
 import { useTasks } from '../hooks';
@@ -26,14 +27,13 @@ const STAGES = {
   FINISHED: 2,
 };
 
-const DEFAULT_TIME = 1;
+const DEFAULT_TIME = 5;
 
 let countdownTimeout: NodeJS.Timeout;
 
 export const Home = () => {
   const [time, setTime] = useState(DEFAULT_TIME);
   const [stage, setStage] = useState(STAGES['READY']);
-
   const [taskName, setTaskName] = useState('');
   const [error, setError] = useState(false);
   const { tasks, currentTask, createTask, jumpTask, deleteTask, editTask, clearTasks, updateToDone, getValidTasks } =
@@ -128,7 +128,7 @@ export const Home = () => {
     switch (stage) {
       case 0:
         return (
-          <Content width="100%" mt="3.5rem" justifyContent="center" alignItems="center" display="flex">
+          <Content width="100%" mt="3rem" justifyContent="center" alignItems="center" display="flex">
             <Button
               width="200px"
               height="50px"
@@ -142,7 +142,7 @@ export const Home = () => {
 
       case 1:
         return (
-          <Content width="100%" mt="3.5rem" justifyContent="center" alignItems="center" display="flex">
+          <Content width="100%" mt="3rem" justifyContent="center" alignItems="center" display="flex">
             <Button
               width="200px"
               height="50px"
@@ -157,7 +157,7 @@ export const Home = () => {
 
       case 2:
         return (
-          <Content width="100%" mt="3.5rem" justifyContent="center" alignItems="center" display="flex">
+          <Content width="100%" mt="3rem" justifyContent="center" alignItems="center" display="flex">
             <Button
               width="200px"
               height="50px"
@@ -181,7 +181,7 @@ export const Home = () => {
 
       default:
         return (
-          <Content width="100%" mt="3.5rem" justifyContent="center" alignItems="center" display="flex">
+          <Content width="100%" mt="3rem" justifyContent="center" alignItems="center" display="flex">
             <Button
               width="200px"
               height="50px"
@@ -197,27 +197,32 @@ export const Home = () => {
   return (
     <Container>
       <Box>
-        <Content m="0 auto" width="400px" p="0 0 3rem 0" borderBottom={`1px solid ${theme.colors.shadow}`}>
+        <Content m="0 auto" width="400px" borderBottom={`1px solid ${theme.colors.shadow}`}>
           {handleStageTitle}
-          <Subtitle mt="4rem">Tarefa Atual</Subtitle>
           {currentTask ? (
-            <Task width="400px" m="1rem 0 0 0" task={currentTask}>
-              <Content display="flex" position="absolute" right="16px">
-                {getValidTasks().length > 1 && (
-                  <Button
-                    width="80px"
-                    height="25px"
-                    label="Pular"
-                    icon="fas fa-angle-double-right"
-                    onClick={handleNext}
-                  />
-                )}
-              </Content>
-            </Task>
+            <Content p="3rem 0">
+              <Subtitle>Tarefa Atual</Subtitle>
+              <Task width="400px" m="1rem 0 0 0" task={currentTask}>
+                <Content display="flex" position="absolute" right="16px">
+                  {getValidTasks().length > 1 && (
+                    <Button
+                      width="80px"
+                      height="25px"
+                      label="Pular"
+                      icon="fas fa-angle-double-right"
+                      onClick={handleNext}
+                    />
+                  )}
+                </Content>
+              </Task>
+            </Content>
           ) : (
-            <Text mt="1.5rem" ml="125px">
-              Crie tarefas agora!
-            </Text>
+            <Content p="1rem 0" display="flex" alignItems="center" flexDirection="column" justifyContent="space-evenly">
+              <Image src="empty_task.svg" alt="Create Task" />
+              <Subtitle color="light" mt="1rem">
+                Crie tarefas agora!
+              </Subtitle>
+            </Content>
           )}
         </Content>
         <Timer minutes={minutes} seconds={seconds} />
@@ -239,7 +244,13 @@ export const Home = () => {
             <Button width="100px" height="40px" label="Limpar" onClick={() => toggle()} />
           </Content>
         </Content>
-        <TaskList tasks={tasks} deleteTask={deleteTask} editTask={editTask} />
+        <TaskList
+          tasks={tasks}
+          currentTask={currentTask}
+          resetCountdown={resetCountdown}
+          deleteTask={deleteTask}
+          editTask={editTask}
+        />
       </Box>
       <Modal
         isShown={isShown}

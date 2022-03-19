@@ -1,8 +1,9 @@
 import styled from 'styled-components';
-import { space } from 'styled-system';
+import { space, color } from 'styled-system';
 
 interface ISubtitleProps {
   mt?: string | null;
+  color?: string | null;
 }
 
 export const Subtitle = styled.h3<ISubtitleProps>`
@@ -10,4 +11,5 @@ export const Subtitle = styled.h3<ISubtitleProps>`
   font-weight: 600;
   color: ${({ theme }) => theme.colors.secondary};
   ${space}
+  ${color}
 `;

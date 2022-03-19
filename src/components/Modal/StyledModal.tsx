@@ -80,7 +80,7 @@ export const Message = styled.div`
 `;
 
 export const YesButton = styled.button`
-  padding: 4px 32px;
+  padding: 8px 32px;
   background: ${({ theme}) => theme.colors.primary};
   border: none;
   border-radius: .5rem;
