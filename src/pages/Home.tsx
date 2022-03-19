@@ -14,6 +14,7 @@ import {
   Modal,
   Image,
   ConfirmationModal,
+  InputTime,
 } from '../components';
 import { useTasks } from '../hooks';
 import { useModal } from '../hooks';
@@ -27,13 +28,19 @@ const STAGES = {
   FINISHED: 2,
 };
 
-const DEFAULT_TIME = 5;
+const MODAL_TYPE = {
+  CLEAR: 'clear',
+  INPUT_TIME: 'input-time',
+};
+
+const DEFAULT_TIME = 25 * 60;
 
 let countdownTimeout: NodeJS.Timeout;
 
 export const Home = () => {
   const [time, setTime] = useState(DEFAULT_TIME);
   const [stage, setStage] = useState(STAGES['READY']);
+  const [modalType, setModalType] = useState<string>(MODAL_TYPE['CLEAR']);
   const [taskName, setTaskName] = useState('');
   const [error, setError] = useState(false);
   const { tasks, currentTask, createTask, jumpTask, deleteTask, editTask, clearTasks, updateToDone, getValidTasks } =
@@ -44,6 +51,15 @@ export const Home = () => {
   const minutes = Math.floor(time / 60);
   const seconds = time % 60;
 
+  const handleChangeTime = () => {
+    setModalType(MODAL_TYPE['INPUT_TIME']);
+    toggle();
+  };
+
+  const onConfirmTime = () => {
+    console.log('ConfirmTime');
+  };
+
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTaskName(e.target.value);
     if (taskName.length > 0) {
@@ -52,6 +68,10 @@ export const Home = () => {
       setError(true);
     }
   };
+
+  const onChangeTime = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTime(e.target.value);
+  }
 
   const onKeyDown = (event: React.KeyboardEvent<HTMLDivElement>): void => {
     if (event.key === 'Enter') {
@@ -93,6 +113,7 @@ export const Home = () => {
 
   const handleCleanAll = () => {
     clearTasks();
+    resetCountdown();
     toggle();
   };
 
@@ -225,7 +246,7 @@ export const Home = () => {
             </Content>
           )}
         </Content>
-        <Timer minutes={minutes} seconds={seconds} />
+        <Timer minutes={minutes} seconds={seconds} onClick={handleChangeTime} />
         {handleStageButtons}
       </Box>
       <Box>
@@ -255,13 +276,29 @@ export const Home = () => {
       <Modal
         isShown={isShown}
         hide={toggle}
-        headerText="Deletar Todas Tarefas"
+        headerText={modalType === MODAL_TYPE['CLEAR'] ? 'Limpar tudo' : 'Escolha um tempo'}
         modalContent={
-          <ConfirmationModal
-            onConfirm={handleCleanAll}
-            onCancel={() => toggle()}
-            message="Tem certeza que quer deletar TODAS as tarefa?"
-          />
+          modalType === MODAL_TYPE['CLEAR'] ? (
+            <ConfirmationModal
+              onConfirm={handleCleanAll}
+              onCancel={() => toggle()}
+              message="Tem certeza que quer deletar TODAS as tarefa?"
+            />
+          ) : (
+            <Content width="250px">
+              <InputTime
+                autoFocus
+                placeholder="Escolha um tempo"
+                error={error}
+                value={time}
+                onChange={onChangeTime}
+                icon={false}
+                width="100%"
+                onKeyDown={onKeyDown}
+              />
+              <ConfirmationModal onConfirm={onConfirmTime} haveNoButton={false} />
+            </Content>
+          )
         }
       />
     </Container>

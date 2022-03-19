@@ -9,6 +9,7 @@ const DisplayItem = styled.div`
   margin: 0 2px;
   background: ${({ theme }) => theme.colors.bgTask};
   border-radius: 0.5rem;
+  cursor: pointer;
 `;
 
 const ValueDisplay = styled.h1`
