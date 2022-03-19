@@ -14,6 +14,7 @@ interface IPropsContent {
   position?: string | null;
   right?: string | null;
   borderBottom?: string | null;
+  border?: string | null;
 }
 
 export const Content = styled.div<ContentProps | IPropsContent>`

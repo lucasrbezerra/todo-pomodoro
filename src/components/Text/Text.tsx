@@ -1,9 +1,10 @@
 import styled from 'styled-components';
-import { space } from 'styled-system';
+import { space, color } from 'styled-system';
 
 interface ITextProps {
   ml?: string | null;
   mt?: string | null;
+  color?: string | null;
 }
 
 export const Text = styled.p<ITextProps>`
@@ -11,4 +12,5 @@ export const Text = styled.p<ITextProps>`
   color: ${({ theme }) => theme.colors.light};
   font-weight: bold;
   ${space}
+  ${color}
 `;

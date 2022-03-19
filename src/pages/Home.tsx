@@ -1,5 +1,19 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Text, Title, Container, Box, Timer, Task, TaskList, Button, Content, Subtitle, Input, Modal, ConfirmationModal } from '../components';
+import {
+  Text,
+  Title,
+  Container,
+  Box,
+  Timer,
+  Task,
+  TaskList,
+  Button,
+  Content,
+  Subtitle,
+  Input,
+  Modal,
+  ConfirmationModal,
+} from '../components';
 import { useTasks } from '../hooks';
 import { useModal } from '../hooks';
 
@@ -12,7 +26,7 @@ const STAGES = {
   FINISHED: 2,
 };
 
-const DEFAULT_TIME = 10;
+const DEFAULT_TIME = 1;
 
 let countdownTimeout: NodeJS.Timeout;
 
@@ -22,8 +36,9 @@ export const Home = () => {
 
   const [taskName, setTaskName] = useState('');
   const [error, setError] = useState(false);
-  const { tasks, currentTask, createTask, jumpTask, deleteTask, editTask, clearTasks } = useTasks();
-  const { toggle, isShown} = useModal();
+  const { tasks, currentTask, createTask, jumpTask, deleteTask, editTask, clearTasks, updateToDone, getValidTasks } =
+    useTasks();
+  const { toggle, isShown } = useModal();
   const theme = useTheme() as ThemeType;
 
   const minutes = Math.floor(time / 60);
@@ -92,7 +107,22 @@ export const Home = () => {
 
   const handleDone = () => {
     resetCountdown();
+    if (!!currentTask) {
+      updateToDone(currentTask, true);
+      jumpTask();
+    }
   };
+
+  const handleStageTitle = useMemo(() => {
+    switch (stage) {
+      case 0:
+        return <Title>Pronto!</Title>;
+      case 1:
+        return <Title>Trabalhando!</Title>;
+      case 2:
+        return <Title>Mais uma?!</Title>;
+    }
+  }, [handleStartTimer, handleDone, resetCountdown, stage]);
 
   const handleStageButtons = useMemo(() => {
     switch (stage) {
@@ -168,12 +198,12 @@ export const Home = () => {
     <Container>
       <Box>
         <Content m="0 auto" width="400px" p="0 0 3rem 0" borderBottom={`1px solid ${theme.colors.shadow}`}>
-          <Title>Pronto!</Title>
+          {handleStageTitle}
           <Subtitle mt="4rem">Tarefa Atual</Subtitle>
           {currentTask ? (
-            <Task width="400px" m="1rem 0 0 0" task={currentTask.task}>
+            <Task width="400px" m="1rem 0 0 0" task={currentTask}>
               <Content display="flex" position="absolute" right="16px">
-                {tasks.length > 1 && (
+                {getValidTasks().length > 1 && (
                   <Button
                     width="80px"
                     height="25px"

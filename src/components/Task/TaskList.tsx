@@ -6,7 +6,7 @@ import { useState } from 'react';
 type TaskListProps = {
   tasks: ITask[];
   deleteTask: (taskId: number) => void;
-  editTask: (taskId: number, newTask: string) => void;
+  editTask: (taskId: number, isDone: boolean, newTask: string) => void;
 };
 
 const MODAL_TYPE = {
@@ -35,7 +35,7 @@ export const TaskList: React.FC<TaskListProps> = ({ tasks, deleteTask, editTask 
       event.preventDefault();
       event.stopPropagation();
       if (taskName.length > 0) {
-        editTask(selectedTask.id, taskName);
+        editTask(selectedTask.id, selectedTask.isDone, taskName);
         setTaskName('');
         toggle();
       } else {
@@ -53,7 +53,7 @@ export const TaskList: React.FC<TaskListProps> = ({ tasks, deleteTask, editTask 
 
   const onConfirmEdit = () => {
     if (taskName.length > 0) {
-      editTask(selectedTask.id, taskName);
+      editTask(selectedTask.id, selectedTask.isDone, taskName);
       setTaskName('');
     } else {
       setError(true);
@@ -65,6 +65,7 @@ export const TaskList: React.FC<TaskListProps> = ({ tasks, deleteTask, editTask 
     deleteTask(selectedTask.id);
     toggle();
   };
+  
   const onCancelDelete = () => toggle();
 
   const handleDelete = (task: ITask) => {
@@ -76,10 +77,22 @@ export const TaskList: React.FC<TaskListProps> = ({ tasks, deleteTask, editTask 
   return (
     <Content width="450px" maxHeight="340px" overflowY="scroll" overflowX="hidden" m="0 auto">
       {tasks.map((task, index) => (
-        <Task key={index} {...task} width="450px" m="1rem auto">
+        <Task key={index} task={task} width="450px" m="1rem auto">
           <Content display="flex" position="absolute" right="16px">
-            <Button width="35px" height="35px" mIcon="0 0 0 .25rem" icon="fas fa-pen" onClick={() => handleEdit(task)} />
-            <Button width="35px" height="35px" mIcon="0 0 0 .25rem" icon="fas fa-trash" onClick={() => handleDelete(task)} />
+            <Button
+              width="35px"
+              height="35px"
+              mIcon="0 0 0 .25rem"
+              icon="fas fa-pen"
+              onClick={() => handleEdit(task)}
+            />
+            <Button
+              width="35px"
+              height="35px"
+              mIcon="0 0 0 .25rem"
+              icon="fas fa-trash"
+              onClick={() => handleDelete(task)}
+            />
           </Content>
         </Task>
       ))}
