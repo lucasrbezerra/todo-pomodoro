@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { layout, LayoutProps, color, flexbox, position, space, border, variant } from 'styled-system';
+import { layout, LayoutProps, color, flexbox, position, space, border } from 'styled-system';
 
 type ContentProps = LayoutProps;
 

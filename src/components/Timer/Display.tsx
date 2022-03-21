@@ -1,6 +1,9 @@
 import styled from 'styled-components';
+import { layout, LayoutProps } from 'styled-system';
 
-const DisplayItem = styled.div`
+type DisplayItemProps = LayoutProps;
+
+const DisplayItem = styled.div<DisplayItemProps>`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -10,6 +13,7 @@ const DisplayItem = styled.div`
   background: ${({ theme }) => theme.colors.bgTask};
   border-radius: 0.5rem;
   cursor: pointer;
+  ${layout}
 `;
 
 const ValueDisplay = styled.h1`
@@ -21,11 +25,13 @@ const ValueDisplay = styled.h1`
 
 interface IDisplayProps {
   value: string;
+  height?: string;
+  width?: string;
 }
 
-export const Display: React.FC<IDisplayProps> = ({ value }) => {
+export const Display: React.FC<IDisplayProps> = ({ value, height, width }) => {
   return (
-    <DisplayItem>
+    <DisplayItem height={height} width={width}> 
       <ValueDisplay>{value}</ValueDisplay>
     </DisplayItem>
   );

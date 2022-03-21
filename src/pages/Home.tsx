@@ -70,7 +70,7 @@ export const Home = () => {
   };
 
   const onChangeTime = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTime(e.target.value);
+    setTime(Number(e.target.value));
   }
 
   const onKeyDown = (event: React.KeyboardEvent<HTMLDivElement>): void => {
@@ -288,11 +288,10 @@ export const Home = () => {
             <Content width="250px">
               <InputTime
                 autoFocus
-                placeholder="Escolha um tempo"
+                placeholder="0"
                 error={error}
                 value={time}
                 onChange={onChangeTime}
-                icon={false}
                 width="100%"
                 onKeyDown={onKeyDown}
               />
