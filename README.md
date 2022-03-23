@@ -1,4 +1,4 @@
-# todo-pomorodo
+# todo-pomodoro
 
 ## Run Project
 1. Clone project
