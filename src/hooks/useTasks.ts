@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
 import { ITask } from '../interfaces';
+import { useStorage } from './useStorage';
 
 export const useTasks = () => {
-  const [tasks, setTasks] = useState<ITask[]>([]);
+  const { setTasksStorage, getStorage, KEYS_STORAGE } = useStorage();
+  const [tasks, setTasks] = useState<ITask[]>(getStorage(KEYS_STORAGE['TASKS']) || []);
   const [currentTask, setCurrentTask] = useState<ITask | any>();
 
   useEffect(() => {
@@ -11,6 +13,7 @@ export const useTasks = () => {
     } else {
       setCurrentTask('');
     }
+    setTasksStorage(tasks);
   }, [tasks]);
 
   const createTask = (taskName: string) => {
@@ -31,7 +34,7 @@ export const useTasks = () => {
   const getDoneTasks = () => tasks.filter((task) => task.isDone);
 
   const jumpTask = () => {
-    if(!currentTask.isDone) {
+    if (!currentTask.isDone) {
       let validTasks = getValidTasks();
       let doneTasks = getDoneTasks();
       validTasks.reverse();

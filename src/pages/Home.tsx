@@ -15,9 +15,7 @@ import {
   ConfirmationModal,
   InputTime,
 } from '../components';
-import { useTasks } from '../hooks';
-import { useModal } from '../hooks';
-
+import { useTasks, useModal, useStorage } from '../hooks';
 import { useTheme } from 'styled-components';
 import { ThemeType } from '../themes';
 
@@ -32,11 +30,12 @@ const MODAL_TYPE = {
   INPUT_TIME: 'input-time',
 };
 
-const DEFAULT_TIME = 25 * 60;
-
 let countdownTimeout: NodeJS.Timeout;
 
 export const Home = () => {
+  const { setTimeStorage, getStorage, KEYS_STORAGE } = useStorage();
+  const DEFAULT_TIME = getStorage(KEYS_STORAGE['TIME_VALUE']) || 25 * 60;
+
   const [time, setTime] = useState(DEFAULT_TIME);
   const [auxTime, setAuxTime] = useState(DEFAULT_TIME);
   const [stage, setStage] = useState(STAGES['READY']);
@@ -57,6 +56,7 @@ export const Home = () => {
   };
 
   const onConfirmTime = () => {
+    setTimeStorage(auxTime);
     setTime(auxTime);
     toggle();
   };
@@ -87,6 +87,14 @@ export const Home = () => {
     }
   };
 
+  const onKeyDownTime = (event: React.KeyboardEvent<HTMLDivElement>): void => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      event.stopPropagation();
+      onConfirmTime();
+    }
+  };
+
   useEffect(() => {
     if (stage === STAGES['RUNNING'] && time > 0) {
       countdownTimeout = setTimeout(() => {
@@ -104,7 +112,7 @@ export const Home = () => {
   const resetCountdown = () => {
     clearTimeout(countdownTimeout);
     setStage(STAGES['READY']);
-    setTime(DEFAULT_TIME);
+    setTime(getStorage(KEYS_STORAGE['TIME_VALUE']) || DEFAULT_TIME);
   };
 
   const handleNext = () => {
@@ -292,7 +300,7 @@ export const Home = () => {
             />
           ) : (
             <Content width="250px">
-              <InputTime error={error} value={time} onChange={onChangeTime} width="100%" onKeyDown={onKeyDown} />
+              <InputTime error={error} value={time} onChange={onChangeTime} width="100%" onKeyDown={onKeyDownTime} />
               <ConfirmationModal onConfirm={onConfirmTime} haveNoButton={false} />
             </Content>
           )
