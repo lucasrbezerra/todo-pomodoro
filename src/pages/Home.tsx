@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
 import {
-  Text,
   Title,
   Container,
   Box,
@@ -39,6 +38,7 @@ let countdownTimeout: NodeJS.Timeout;
 
 export const Home = () => {
   const [time, setTime] = useState(DEFAULT_TIME);
+  const [auxTime, setAuxTime] = useState(DEFAULT_TIME);
   const [stage, setStage] = useState(STAGES['READY']);
   const [modalType, setModalType] = useState<string>(MODAL_TYPE['CLEAR']);
   const [taskName, setTaskName] = useState('');
@@ -57,7 +57,12 @@ export const Home = () => {
   };
 
   const onConfirmTime = () => {
-    console.log('ConfirmTime');
+    setTime(auxTime);
+    toggle();
+  };
+
+  const onChangeTime = (time: number) => {
+    setAuxTime(time);
   };
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -68,10 +73,6 @@ export const Home = () => {
       setError(true);
     }
   };
-
-  const onChangeTime = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTime(Number(e.target.value));
-  }
 
   const onKeyDown = (event: React.KeyboardEvent<HTMLDivElement>): void => {
     if (event.key === 'Enter') {
@@ -109,6 +110,11 @@ export const Home = () => {
   const handleNext = () => {
     jumpTask();
     resetCountdown();
+  };
+
+  const handleClear = () => {
+    setModalType(MODAL_TYPE['CLEAR']);
+    toggle();
   };
 
   const handleCleanAll = () => {
@@ -262,7 +268,7 @@ export const Home = () => {
               onClick={handleAddTask}
               onKeyDown={onKeyDown}
             />
-            <Button width="100px" height="40px" label="Limpar" onClick={() => toggle()} />
+            <Button width="100px" height="40px" label="Limpar" onClick={handleClear} />
           </Content>
         </Content>
         <TaskList
@@ -286,15 +292,7 @@ export const Home = () => {
             />
           ) : (
             <Content width="250px">
-              <InputTime
-                autoFocus
-                placeholder="0"
-                error={error}
-                value={time}
-                onChange={onChangeTime}
-                width="100%"
-                onKeyDown={onKeyDown}
-              />
+              <InputTime error={error} value={time} onChange={onChangeTime} width="100%" onKeyDown={onKeyDown} />
               <ConfirmationModal onConfirm={onConfirmTime} haveNoButton={false} />
             </Content>
           )
