@@ -1,8 +1,16 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  display: flex;
+  /* display: flex;
   align-items: center;
+  justify-content: space-evenly; */
+  /* display: flex; */
+  display: grid;
+  grid-template-areas:
+    'switch switch'
+    'leftBox rightBox';
+
+  align-items: start;
   justify-content: space-evenly;
   height: 100vh;
   width: 100vw;

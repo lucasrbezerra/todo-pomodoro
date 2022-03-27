@@ -15,6 +15,7 @@ const SwitchItem = styled.h3<SwitchItemProps>`
   padding-bottom: 4px;
   transition: all 0.2s ease-in;
   border-radius: 2px;
+  grid-area: switch;
   &:hover {
     color: ${({ theme }) => theme.colors.primary};
     cursor: pointer;
@@ -25,9 +26,8 @@ const SwitchItem = styled.h3<SwitchItemProps>`
 
 const WrapperSwitch = styled.div`
   width: 100%;
-  position: absolute;
-  top: 4rem;
   display: none;
+  margin-top: 2rem;
   @media screen and (min-width: 480px) and (max-width: 1024px) {
     display: flex;
     align-items: center;
