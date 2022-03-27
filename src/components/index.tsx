@@ -9,3 +9,4 @@ export * from './Input';
 export * from './Timer';
 export * from './Modal';
 export * from './Image';
+export * from './Switch';

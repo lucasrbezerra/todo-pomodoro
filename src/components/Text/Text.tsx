@@ -2,10 +2,11 @@ import styled from 'styled-components';
 import { space, color } from 'styled-system';
 
 interface ITextProps {
-  ml?: string | null;
-  mt?: string | null;
-  p?: string | null;
-  color?: string | null;
+  m?: string;
+  ml?: string;
+  mt?: string;
+  p?: string;
+  color?: string;
 }
 
 export const Text = styled.p<ITextProps>`

@@ -4,17 +4,18 @@ import { layout, LayoutProps, color, flexbox, position, space, border } from 'st
 type ContentProps = LayoutProps;
 
 interface IPropsContent {
-  bg?: string | null;
-  flexDirection?: string | null;
-  alignItems?: string | null;
-  justifyContent?: string | null;
-  m?: string | null;
-  p?: string | null;
-  mt?: string | null;
-  position?: string | null;
-  right?: string | null;
-  borderBottom?: string | null;
-  border?: string | null;
+  bg?: string;
+  flexDirection?: string;
+  alignItems?: string;
+  justifyContent?: string;
+  m?: string;
+  p?: string;
+  mt?: string;
+  position?: string;
+  right?: string;
+  top?: string;
+  borderBottom?: string;
+  border?: string;
 }
 
 export const Content = styled.div<ContentProps | IPropsContent>`

@@ -14,8 +14,9 @@ import {
   Image,
   ConfirmationModal,
   InputTime,
+  Switch,
 } from '../components';
-import { useTasks, useModal, useStorage } from '../hooks';
+import { useTasks, useModal, useStorage, useWindowSize } from '../hooks';
 import { useTheme } from 'styled-components';
 import { ThemeType } from '../themes';
 
@@ -30,6 +31,11 @@ const MODAL_TYPE = {
   INPUT_TIME: 'input-time',
 };
 
+const SELECTED_SWITCH = {
+  TIMER: 'timer',
+  TASKS: 'tasks',
+};
+
 let countdownTimeout: NodeJS.Timeout;
 
 export const Home = () => {
@@ -38,6 +44,7 @@ export const Home = () => {
 
   const [time, setTime] = useState(DEFAULT_TIME);
   const [auxTime, setAuxTime] = useState(DEFAULT_TIME);
+  const [selectedSwitch, setSelectedSwitch] = useState(SELECTED_SWITCH['TIMER']);
   const [stage, setStage] = useState(STAGES['READY']);
   const [modalType, setModalType] = useState<string>(MODAL_TYPE['CLEAR']);
   const [taskName, setTaskName] = useState('');
@@ -45,6 +52,7 @@ export const Home = () => {
   const { tasks, currentTask, createTask, jumpTask, deleteTask, editTask, clearTasks, updateToDone, getValidTasks } =
     useTasks();
   const { toggle, isShown } = useModal();
+  const { windowDimensions } = useWindowSize();
   const theme = useTheme() as ThemeType;
 
   const minutes = Math.floor(time / 60);
@@ -148,6 +156,11 @@ export const Home = () => {
     }
   };
 
+  const chooseLayout = (value: string) => {
+    const { width } = windowDimensions;
+    return width > 1024 || value === selectedSwitch;
+  };
+
   const handleStageTitle = useMemo(() => {
     switch (stage) {
       case 0:
@@ -231,62 +244,73 @@ export const Home = () => {
 
   return (
     <Container>
-      <Box>
-        <Content m="0 auto" width="400px" borderBottom={`1px solid ${theme.colors.shadow}`}>
-          {handleStageTitle}
-          {currentTask ? (
-            <Content p="3rem 0">
-              <Subtitle>Tarefa Atual</Subtitle>
-              <Task width="400px" m="1rem 0 0 0" task={currentTask}>
-                <Content display="flex" position="absolute" right="16px">
-                  {getValidTasks().length > 1 && (
-                    <Button
-                      width="80px"
-                      height="25px"
-                      label="Pular"
-                      icon="fas fa-angle-double-right"
-                      onClick={handleNext}
-                    />
-                  )}
-                </Content>
-              </Task>
-            </Content>
-          ) : (
-            <Content p="1rem 0" display="flex" alignItems="center" flexDirection="column" justifyContent="space-evenly">
-              <Image src="empty_task.svg" alt="Create Task" />
-              <Subtitle color="light" mt="1rem">
-                Crie tarefas agora!
-              </Subtitle>
-            </Content>
-          )}
-        </Content>
-        <Timer minutes={minutes} seconds={seconds} onClick={handleChangeTime} />
-        {handleStageButtons}
-      </Box>
-      <Box>
-        <Content m="0 auto" width="450px" borderBottom={`1px solid ${theme.colors.shadow}`}>
-          <Title>Tarefas</Title>
-          <Content display="flex" alignItems="center" p="1rem 0 1.5rem 0">
-            <Input
-              autoFocus
-              placeholder="Entre com uma tarefa nova..."
-              error={error}
-              value={taskName}
-              onChange={onChange}
-              onClick={handleAddTask}
-              onKeyDown={onKeyDown}
-            />
-            <Button width="100px" height="40px" label="Limpar" onClick={handleClear} />
+      <Switch selectedSwitch={selectedSwitch} setSelectedSwitch={setSelectedSwitch} SELECTED_SWITCH={SELECTED_SWITCH} />
+      {chooseLayout(SELECTED_SWITCH['TIMER']) && (
+        <Box>
+          <Content m="0 auto" width="400px" borderBottom={`1px solid ${theme.colors.shadow}`}>
+            {handleStageTitle}
+            {currentTask ? (
+              <Content p="3rem 0">
+                <Subtitle>Tarefa Atual</Subtitle>
+                <Task width="400px" m="1rem 0 0 0" task={currentTask}>
+                  <Content display="flex" position="absolute" right="16px">
+                    {getValidTasks().length > 1 && (
+                      <Button
+                        width="80px"
+                        height="25px"
+                        label="Pular"
+                        icon="fas fa-angle-double-right"
+                        onClick={handleNext}
+                      />
+                    )}
+                  </Content>
+                </Task>
+              </Content>
+            ) : (
+              <Content
+                p="1rem 0"
+                display="flex"
+                alignItems="center"
+                flexDirection="column"
+                justifyContent="space-evenly"
+              >
+                <Image src="empty_task.svg" alt="Create Task" />
+                <Subtitle color="light" mt="1rem">
+                  Crie tarefas agora!
+                </Subtitle>
+              </Content>
+            )}
           </Content>
-        </Content>
-        <TaskList
-          tasks={tasks}
-          currentTask={currentTask}
-          resetCountdown={resetCountdown}
-          deleteTask={deleteTask}
-          editTask={editTask}
-        />
-      </Box>
+          <Timer minutes={minutes} seconds={seconds} onClick={handleChangeTime} />
+          {handleStageButtons}
+        </Box>
+      )}
+      {chooseLayout(SELECTED_SWITCH['TASKS']) && (
+        <Box>
+          <Content m="0 auto" width="450px" borderBottom={`1px solid ${theme.colors.shadow}`}>
+            <Title>Tarefas</Title>
+            <Content display="flex" alignItems="center" p="1rem 0 1.5rem 0">
+              <Input
+                autoFocus
+                placeholder="Entre com uma tarefa nova..."
+                error={error}
+                value={taskName}
+                onChange={onChange}
+                onClick={handleAddTask}
+                onKeyDown={onKeyDown}
+              />
+              <Button width="100px" height="40px" label="Limpar" onClick={handleClear} />
+            </Content>
+          </Content>
+          <TaskList
+            tasks={tasks}
+            currentTask={currentTask}
+            resetCountdown={resetCountdown}
+            deleteTask={deleteTask}
+            editTask={editTask}
+          />
+        </Box>
+      )}
       <Modal
         isShown={isShown}
         hide={toggle}

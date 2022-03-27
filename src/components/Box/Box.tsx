@@ -7,8 +7,8 @@ export const Box = styled.div`
 
     width: 500px;
     height: 500px;
-    background: red;
     margin: 0 1rem;
+    margin-top: 4rem;
     background: ${({theme}) => theme.colors.bgBox};
     border-radius: .5rem;
 `;

@@ -2,8 +2,9 @@ import styled from 'styled-components';
 import { space, color } from 'styled-system';
 
 interface ISubtitleProps {
-  mt?: string | null;
-  color?: string | null;
+  m?: string;
+  mt?: string;
+  color?: string;
 }
 
 export const Subtitle = styled.h3<ISubtitleProps>`
