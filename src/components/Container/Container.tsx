@@ -19,4 +19,16 @@ export const Container = styled.div`
     ${({ theme }) => theme.colors.backgroundPrimary} 36.22%,
     ${({ theme }) => theme.colors.backgroundSecondary} 99.34%
   );
+  @media (max-width: 767px) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  @media (min-width: 768px) and (max-width: 1024px) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
 `;

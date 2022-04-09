@@ -13,6 +13,10 @@ const DisplayItem = styled.div<DisplayItemProps>`
   background: ${({ theme }) => theme.colors.bgTask};
   border-radius: 0.5rem;
   cursor: pointer;
+  @media (max-width: 767px) {
+    width: 60px;
+    height: 60px;
+  }
   ${layout}
 `;
 
@@ -21,6 +25,9 @@ const ValueDisplay = styled.h1`
   font-family: 'Rajdhani', sans-serif;
   font-weight: 600;
   color: ${({ theme }) => theme.colors.light};
+  @media (max-width: 767px) {
+    font-size: calc(${({ theme }) => theme.fontSizes.display} - 1.5rem);
+  }
 `;
 
 interface IDisplayProps {
@@ -31,7 +38,7 @@ interface IDisplayProps {
 
 export const Display: React.FC<IDisplayProps> = ({ value, height, width }) => {
   return (
-    <DisplayItem height={height} width={width}> 
+    <DisplayItem height={height} width={width}>
       <ValueDisplay>{value}</ValueDisplay>
     </DisplayItem>
   );

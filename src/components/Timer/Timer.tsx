@@ -16,7 +16,7 @@ export const Timer: React.FC<ITimerProps> = ({ minutes, seconds, onClick }) => {
       justifyContent="center"
       m="0 auto"
       mt="2rem"
-      width="400px"
+      width="100%"
       onClick={onClick}
     >
       <Display value={minuteLeft} />

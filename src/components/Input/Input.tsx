@@ -18,6 +18,7 @@ const CustomInput = styled.input<InputProps>`
   background: ${({ theme }) => theme.colors.bgTask};
   color: ${({ theme }) => theme.colors.light};
   padding: 0.75rem;
+  padding-right: 3rem;
   margin-right: 0.5rem;
   border-radius: 0.5rem;
   outline: none;

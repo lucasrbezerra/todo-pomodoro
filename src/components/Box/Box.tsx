@@ -12,4 +12,13 @@ export const Box = styled.div`
   &:nth-child(3) {
     grid-area: rightBox;
   }
+  @media (min-width: 0px) and (max-width: 480px) {
+    width: 90%;
+  }
+  @media (min-width: 480px) and (max-width: 767px) {
+    width: 60%;
+  }
+  @media (min-width: 768px) and (max-width: 1024px) {
+    width: 60%;
+  }
 `;

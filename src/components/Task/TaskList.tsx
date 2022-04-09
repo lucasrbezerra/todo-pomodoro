@@ -2,6 +2,7 @@ import { Task, Content, Button, Modal, ConfirmationModal, Input } from '../../co
 import { ITask } from '../../interfaces';
 import { useModal } from '../../hooks';
 import { useState } from 'react';
+import { AnimatedList } from 'react-animated-list';
 
 type TaskListProps = {
   tasks: ITask[];
@@ -80,27 +81,30 @@ export const TaskList: React.FC<TaskListProps> = ({ tasks, currentTask, deleteTa
   };
 
   return (
-    <Content width="450px" maxHeight="340px" overflowY="scroll" overflowX="hidden" m="0 auto">
-      {tasks.map((task, index) => (
-        <Task key={index} task={task} width="450px" m="1rem auto">
-          <Content display="flex" position="absolute" right="16px">
-            <Button
-              width="35px"
-              height="35px"
-              mIcon="0 0 0 .25rem"
-              icon="fas fa-pen"
-              onClick={() => handleEdit(task)}
-            />
-            <Button
-              width="35px"
-              height="35px"
-              mIcon="0 0 0 .25rem"
-              icon="fas fa-trash"
-              onClick={() => handleDelete(task)}
-            />
-          </Content>
-        </Task>
-      ))}
+    <Content width="85%" maxHeight="340px" overflowY="scroll" overflowX="hidden" m="0 auto">
+      <AnimatedList animation={'grow'}>
+        {tasks.map((task, index) => (
+          <Task key={index} task={task}>
+            <Content display="flex" position="absolute" right="16px">
+              <Button
+                width="35px"
+                height="35px"
+                mIcon="0 0 0 .25rem"
+                icon="fas fa-pen"
+                onClick={() => handleEdit(task)}
+              />
+              <Button
+                width="35px"
+                height="35px"
+                mIcon="0 0 0 .25rem"
+                icon="fas fa-trash"
+                onClick={() => handleDelete(task)}
+              />
+            </Content>
+          </Task>
+        ))}
+      </AnimatedList>
+
       <Modal
         isShown={isShown}
         hide={toggle}

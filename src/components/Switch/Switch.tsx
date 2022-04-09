@@ -12,10 +12,12 @@ const SwitchItem = styled.h3<SwitchItemProps>`
   font-weight: bold;
   text-align: center;
   margin: 1rem 1rem;
+  margin-bottom: 2rem;
   padding-bottom: 4px;
   transition: all 0.2s ease-in;
   border-radius: 2px;
   grid-area: switch;
+
   &:hover {
     color: ${({ theme }) => theme.colors.primary};
     cursor: pointer;

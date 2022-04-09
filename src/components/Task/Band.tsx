@@ -12,4 +12,5 @@ export const Band = styled.div<BandProps>`
   border-top-left-radius: 8px;
   border-bottom-left-radius: 8px;
   ${color}
+  
 `;

@@ -247,12 +247,12 @@ export const Home = () => {
       <Switch selectedSwitch={selectedSwitch} setSelectedSwitch={setSelectedSwitch} SELECTED_SWITCH={SELECTED_SWITCH} />
       {chooseLayout(SELECTED_SWITCH['TIMER']) && (
         <Box>
-          <Content m="0 auto" width="400px" borderBottom={`1px solid ${theme.colors.shadow}`}>
+          <Content m="0 auto" width="80%" borderBottom={`1px solid ${theme.colors.shadow}`}>
             {handleStageTitle}
             {currentTask ? (
-              <Content p="3rem 0">
+              <Content p="3rem 0" width="100%">
                 <Subtitle>Tarefa Atual</Subtitle>
-                <Task width="400px" m="1rem 0 0 0" task={currentTask}>
+                <Task task={currentTask}>
                   <Content display="flex" position="absolute" right="16px">
                     {getValidTasks().length > 1 && (
                       <Button
@@ -287,7 +287,7 @@ export const Home = () => {
       )}
       {chooseLayout(SELECTED_SWITCH['TASKS']) && (
         <Box>
-          <Content m="0 auto" width="450px" borderBottom={`1px solid ${theme.colors.shadow}`}>
+          <Content m="0 auto" width="85%" borderBottom={`1px solid ${theme.colors.shadow}`}>
             <Title>Tarefas</Title>
             <Content display="flex" alignItems="center" p="1rem 0 1.5rem 0">
               <Input
