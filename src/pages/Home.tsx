@@ -117,9 +117,15 @@ export const Home = () => {
       new Audio('/sound/public_notification.mp3').play();
 
       if (Notification.permission === 'granted') {
-        new Notification('Tarefa finalizada!', {
-          body: `Você terminou: ${currentTask.task} (;`,
-        });
+        if (!!currentTask) {
+          new Notification('Tarefa finalizada!', {
+            body: `Você terminou: ${currentTask.task} (;`,
+          });
+        } else {
+          new Notification('Timer finalizada!', {
+            body: `Chegou ao final o temporizador`,
+          });
+        }
       }
     }
   }, [stage, time]);
