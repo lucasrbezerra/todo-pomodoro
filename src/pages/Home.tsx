@@ -107,9 +107,9 @@ export const Home = () => {
     if (!window.Notification) {
       alert('Browser does not support notifications.');
     } else {
-      new Audio('/sound/public_notification.mp3').play();
       if (Notification.permission === 'granted') {
-        alert(`Você terminou: ${currentTask.task} (-;`)
+        new Audio('/sound/public_notification.mp3').play();
+        // Android.showToast(toast);
         // if (!!currentTask) {
         //   new Notification('Tarefa finalizada!', {
         //     body: `Você terminou: ${currentTask.task} (;`,
