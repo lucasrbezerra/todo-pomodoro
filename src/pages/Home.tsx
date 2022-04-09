@@ -104,12 +104,23 @@ export const Home = () => {
   };
 
   useEffect(() => {
+    Notification.requestPermission();
+  }, []);
+
+  useEffect(() => {
     if (stage === STAGES['RUNNING'] && time > 0) {
       countdownTimeout = setTimeout(() => {
         setTime(time - 1);
       }, 1000);
     } else if (stage === STAGES['RUNNING'] && time === 0) {
       setStage(STAGES['FINISHED']);
+      new Audio('/sound/public_notification.mp3').play();
+
+      if (Notification.permission === 'granted') {
+        new Notification('Tarefa finalizada!', {
+          body: `Você terminou: ${currentTask.task} (;`,
+        });
+      }
     }
   }, [stage, time]);
 

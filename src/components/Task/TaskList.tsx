@@ -74,6 +74,7 @@ export const TaskList: React.FC<TaskListProps> = ({ tasks, currentTask, deleteTa
 
   const onCancelDelete = () => toggle();
 
+  
   const handleDelete = (task: ITask) => {
     setModalType(MODAL_TYPE['DELETE']);
     setSelectedTask(task);
