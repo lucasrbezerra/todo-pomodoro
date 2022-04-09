@@ -107,17 +107,18 @@ export const Home = () => {
     if (!window.Notification) {
       alert('Browser does not support notifications.');
     } else {
-      // new Audio('/sound/public_notification.mp3').play();
+      new Audio('/sound/public_notification.mp3').play();
       if (Notification.permission === 'granted') {
-        if (!!currentTask) {
-          new Notification('Tarefa finalizada!', {
-            body: `Você terminou: ${currentTask.task} (;`,
-          });
-        } else {
-          new Notification('Timer finalizada!', {
-            body: `Chegou ao final o temporizador`,
-          });
-        }
+        alert(`Você terminou: ${currentTask.task} (-;`)
+        // if (!!currentTask) {
+        //   new Notification('Tarefa finalizada!', {
+        //     body: `Você terminou: ${currentTask.task} (;`,
+        //   });
+        // } else {
+        //   new Notification('Timer finalizada!', {
+        //     body: `Chegou ao final o temporizador`,
+        //   });
+        // }
       }
     }
   };
