@@ -22,7 +22,7 @@ export const useTasks = () => {
       task: taskName,
       isDone: false,
     };
-    setTasks([newTask, ...tasks]);
+    setTasks([...tasks, newTask]);
   };
 
   const clearTasks = () => {
