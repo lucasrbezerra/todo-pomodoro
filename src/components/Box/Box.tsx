@@ -14,11 +14,14 @@ export const Box = styled.div`
   }
   @media (min-width: 0px) and (max-width: 480px) {
     width: 90%;
+    margin-bottom: 2rem;
   }
   @media (min-width: 480px) and (max-width: 767px) {
     width: 60%;
+    margin-bottom: 2rem;
   }
   @media (min-width: 768px) and (max-width: 1024px) {
     width: 60%;
+    margin-bottom: 2rem;
   }
 `;
