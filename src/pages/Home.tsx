@@ -193,7 +193,7 @@ export const Home = () => {
     switch (stage) {
       case 0:
         return (
-          <Content width="100%" mt="3rem" justifyContent="center" alignItems="center" display="flex">
+          <Content width="100%" mt="2rem" justifyContent="center" alignItems="center" display="flex">
             <Button
               width="200px"
               height="50px"

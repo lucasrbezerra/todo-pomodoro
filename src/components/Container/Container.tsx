@@ -23,12 +23,12 @@ export const Container = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
   }
   @media (min-width: 768px) and (max-width: 1024px) {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-  }
+}
 `;
