@@ -107,7 +107,7 @@ export const Home = () => {
     if (!window.Notification) {
       alert('Browser does not support notifications.');
     } else {
-      new Audio('/sound/public_notification.mp3').play();
+      // new Audio('/sound/public_notification.mp3').play();
       if (Notification.permission === 'granted') {
         if (!!currentTask) {
           new Notification('Tarefa finalizada!', {
