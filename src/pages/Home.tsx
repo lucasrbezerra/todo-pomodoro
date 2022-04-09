@@ -214,7 +214,7 @@ export const Home = () => {
 
       case 1:
         return (
-          <Content width="100%" mt="3rem" justifyContent="center" alignItems="center" display="flex">
+          <Content width="100%"  mt="2.5rem" justifyContent="center" alignItems="center" display="flex">
             <Button
               width="200px"
               height="50px"
@@ -229,7 +229,7 @@ export const Home = () => {
 
       case 2:
         return (
-          <Content width="100%" mt="3rem" justifyContent="center" alignItems="center" display="flex">
+          <Content width="100%" mt="2.5rem" justifyContent="center" alignItems="center" display="flex">
             <Button
               width="200px"
               height="50px"
@@ -253,7 +253,7 @@ export const Home = () => {
 
       default:
         return (
-          <Content width="100%" mt="3rem" justifyContent="center" alignItems="center" display="flex">
+          <Content width="100%"  mt="2.5rem" justifyContent="center" alignItems="center" display="flex">
             <Button
               width="200px"
               height="50px"
