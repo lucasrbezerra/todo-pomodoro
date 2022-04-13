@@ -1,17 +1,17 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  /* display: flex;
+  display: flex;
   align-items: center;
-  justify-content: space-evenly; */
-  /* display: flex; */
-  display: grid;
+  justify-content: space-evenly;
+
+  /* display: grid;
   grid-template-areas:
     'switch switch'
     'leftBox rightBox';
 
   align-items: start;
-  justify-content: space-evenly;
+  justify-content: space-evenly; */
   height: 100vh;
   width: 100vw;
   background: linear-gradient(
@@ -23,7 +23,7 @@ export const Container = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: center;
   }
   @media (min-width: 768px) and (max-width: 1024px) {
     display: flex;

@@ -74,7 +74,6 @@ export const TaskList: React.FC<TaskListProps> = ({ tasks, currentTask, deleteTa
 
   const onCancelDelete = () => toggle();
 
-  
   const handleDelete = (task: ITask) => {
     setModalType(MODAL_TYPE['DELETE']);
     setSelectedTask(task);
@@ -85,7 +84,7 @@ export const TaskList: React.FC<TaskListProps> = ({ tasks, currentTask, deleteTa
     <Content width="85%" maxHeight="340px" overflowY="scroll" overflowX="hidden" m="0 auto">
       <AnimatedList animation={'grow'}>
         {tasks.map((task, index) => (
-          <Task key={index} task={task}>
+          <Task key={index} task={task} currentTask={currentTask}>
             <Content display="flex" position="absolute" right="16px">
               <Button
                 width="35px"

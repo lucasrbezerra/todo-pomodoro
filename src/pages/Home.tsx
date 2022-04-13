@@ -15,6 +15,7 @@ import {
   ConfirmationModal,
   InputTime,
   Switch,
+  Animation,
 } from '../components';
 import { useTasks, useModal, useStorage, useWindowSize } from '../hooks';
 import { useTheme } from 'styled-components';
@@ -43,6 +44,7 @@ export const Home = () => {
   const DEFAULT_TIME = getStorage(KEYS_STORAGE['TIME_VALUE']) || 25 * 60;
 
   const [time, setTime] = useState(DEFAULT_TIME);
+  const [animation, setAnimation] = useState(false);
   const [auxTime, setAuxTime] = useState(DEFAULT_TIME);
   const [selectedSwitch, setSelectedSwitch] = useState(SELECTED_SWITCH['TIMER']);
   const [stage, setStage] = useState(STAGES['READY']);
@@ -134,6 +136,10 @@ export const Home = () => {
       }, 1000);
     } else if (stage === STAGES['RUNNING'] && time === 0) {
       setStage(STAGES['FINISHED']);
+      setAnimation(true);
+      setTimeout(() => {
+        setAnimation(false);
+      }, 2500);
       notifyMe();
     }
   }, [stage, time]);
@@ -215,7 +221,7 @@ export const Home = () => {
 
       case 1:
         return (
-          <Content width="100%"  mt="2.5rem" justifyContent="center" alignItems="center" display="flex">
+          <Content width="100%" mt="2.5rem" justifyContent="center" alignItems="center" display="flex">
             <Button
               width="200px"
               height="50px"
@@ -254,7 +260,7 @@ export const Home = () => {
 
       default:
         return (
-          <Content width="100%"  mt="2.5rem" justifyContent="center" alignItems="center" display="flex">
+          <Content width="100%" mt="2.5rem" justifyContent="center" alignItems="center" display="flex">
             <Button
               width="200px"
               height="50px"
@@ -269,6 +275,7 @@ export const Home = () => {
 
   return (
     <Container>
+      {animation && <Animation />}
       <Switch selectedSwitch={selectedSwitch} setSelectedSwitch={setSelectedSwitch} SELECTED_SWITCH={SELECTED_SWITCH} />
       {chooseLayout(SELECTED_SWITCH['TIMER']) && (
         <Box>
@@ -277,7 +284,7 @@ export const Home = () => {
             {currentTask ? (
               <Content p="3rem 0" width="100%">
                 <Subtitle>Tarefa Atual</Subtitle>
-                <Task task={currentTask}>
+                <Task task={currentTask} currentTask={currentTask}>
                   <Content display="flex" position="absolute" right="16px">
                     {getValidTasks().length > 1 && (
                       <Button
