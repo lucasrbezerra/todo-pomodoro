@@ -9,6 +9,7 @@ const CustomAnimation = styled.div`
   align-items: center;
   justify-content: center;
   position: absolute;
+  z-index: 1000;
 `;
 export const Animation: React.FC = () => {
   const defaultOptions = {
