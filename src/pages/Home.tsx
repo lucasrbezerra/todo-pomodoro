@@ -68,6 +68,7 @@ export const Home = () => {
   const onConfirmTime = () => {
     setTimeStorage(auxTime);
     setTime(auxTime);
+    resetCountdown();
     toggle();
   };
 

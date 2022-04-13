@@ -22,7 +22,10 @@ export const useTasks = () => {
       task: taskName,
       isDone: false,
     };
-    setTasks([...tasks, newTask]);
+    let valid_tasks = tasks.filter(task => !task.isDone);
+    valid_tasks.push(newTask);
+    const final_array = valid_tasks.concat(tasks.filter(task => task.isDone));
+    setTasks(final_array);
   };
 
   const clearTasks = () => {
