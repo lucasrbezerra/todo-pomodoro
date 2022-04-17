@@ -11,3 +11,4 @@ export * from './Modal';
 export * from './Image';
 export * from './Switch';
 export * from './Animation';
+export * from './Navbar';

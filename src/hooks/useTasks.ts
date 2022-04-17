@@ -22,14 +22,20 @@ export const useTasks = () => {
       task: taskName,
       isDone: false,
     };
-    let valid_tasks = tasks.filter(task => !task.isDone);
+    let valid_tasks = tasks.filter((task) => !task.isDone);
     valid_tasks.push(newTask);
-    const final_array = valid_tasks.concat(tasks.filter(task => task.isDone));
+    const final_array = valid_tasks.concat(tasks.filter((task) => task.isDone));
     setTasks(final_array);
   };
 
   const clearTasks = () => {
     setTasks([]);
+  };
+
+  const resetAllTasks = () => {
+    let reseted_tasks = [...tasks];
+    reseted_tasks.map((task) => (task.isDone = false));
+    setTasks(reseted_tasks);
   };
 
   const getValidTasks = () => tasks.filter((task) => !task.isDone);
@@ -92,5 +98,5 @@ export const useTasks = () => {
     setTasks(tempTasks);
   };
 
-  return { tasks, currentTask, createTask, jumpTask, deleteTask, editTask, clearTasks, updateToDone, getValidTasks };
+  return { tasks, currentTask, createTask, jumpTask, deleteTask, editTask, clearTasks, updateToDone, getValidTasks, resetAllTasks };
 };

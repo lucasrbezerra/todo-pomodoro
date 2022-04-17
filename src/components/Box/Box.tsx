@@ -1,27 +1,30 @@
 import styled from 'styled-components';
 
 export const Box = styled.div`
-  width: 500px;
+  width: 550px;
   height: 500px;
   margin: 0 1rem;
   background: ${({ theme }) => theme.colors.bgBox};
   border-radius: 0.5rem;
-  &:nth-child(2) {
-    grid-area: leftBox;
+  flex-basis: 35%;
+  padding-bottom: 1rem;
+  @media screen and (max-width: 576px) {
+    margin: 0;
+    flex-basis: 90%;
+    height: 70%;
   }
-  &:nth-child(3) {
-    grid-area: rightBox;
+  @media screen and (min-width: 576px) and (max-width: 768px) {
+    margin: 0;
+    flex-basis: 80%;
+    height: 70%;
   }
-  @media (min-width: 0px) and (max-width: 480px) {
-    width: 90%;
-    margin-bottom: 0.5rem;
+  @media screen and (min-width: 768px) and (max-width: 992px) {
+    margin: 0;
+    flex-basis: 55%;
+    height: 70%;
   }
-  @media (min-width: 480px) and (max-width: 767px) {
-    width: 60%;
-    margin-bottom: 0.5rem;
+  @media screen and (min-width: 992px) and (max-width: 1200px) {
   }
-  @media (min-width: 768px) and (max-width: 1024px) {
-    width: 60%;
-    margin-bottom: 0.5rem;
+  @media screen and (min-width: 1200px) and (max-width: 1400px) {
   }
 `;

@@ -49,7 +49,7 @@ export const Input: React.FC<IInputProps> = ({
   onClick,
   onKeyDown,
   icon = true,
-  width = '80%',
+  width = '100%',
 }) => {
   const theme = useTheme() as ThemeType;
   return (

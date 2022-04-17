@@ -3,10 +3,13 @@ import { ITask } from '../interfaces';
 export const useStorage = () => {
   const KEYS_STORAGE = {
     TIME_VALUE: 'time-value',
+    TIME_VALUE_SLEEP: 'time-value-sleep',
     TASKS: 'tasks',
   };
 
   const setTimeStorage = (value: string) => localStorage.setItem(KEYS_STORAGE['TIME_VALUE'], value);
+
+  const setTimeSleepStorage = (value: string) => localStorage.setItem(KEYS_STORAGE['TIME_VALUE_SLEEP'], value);
 
   const setTasksStorage = (value: ITask[]) => {
     let updated_value = JSON.stringify(value);
@@ -21,5 +24,5 @@ export const useStorage = () => {
     }
   };
 
-  return { setTimeStorage, setTasksStorage, getStorage, KEYS_STORAGE };
+  return { setTimeStorage, setTasksStorage, setTimeSleepStorage, getStorage, KEYS_STORAGE };
 };
