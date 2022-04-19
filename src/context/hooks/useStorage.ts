@@ -1,4 +1,4 @@
-import { ITask } from '../interfaces';
+import { ITask } from '../../interfaces';
 
 export const useStorage = () => {
   const KEYS_STORAGE = {

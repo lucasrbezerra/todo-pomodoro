@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react';
-import { ITask } from '../interfaces';
-import { useStorage } from './useStorage';
+import { useContext, useEffect, useState } from 'react';
+import { IStorageContext, ITask } from '../../interfaces';
+import { StorageContext } from '../StorageContext';
 
 export const useTasks = () => {
-  const { setTasksStorage, getStorage, KEYS_STORAGE } = useStorage();
+  const { setTasksStorage, getStorage, KEYS_STORAGE } = useContext(StorageContext) as IStorageContext;
   const [tasks, setTasks] = useState<ITask[]>(getStorage(KEYS_STORAGE['TASKS']) || []);
   const [currentTask, setCurrentTask] = useState<ITask | any>();
 
@@ -98,5 +98,16 @@ export const useTasks = () => {
     setTasks(tempTasks);
   };
 
-  return { tasks, currentTask, createTask, jumpTask, deleteTask, editTask, clearTasks, updateToDone, getValidTasks, resetAllTasks };
+  return {
+    tasks,
+    currentTask,
+    createTask,
+    jumpTask,
+    deleteTask,
+    editTask,
+    clearTasks,
+    updateToDone,
+    getValidTasks,
+    resetAllTasks,
+  };
 };

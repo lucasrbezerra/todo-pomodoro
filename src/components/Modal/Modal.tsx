@@ -7,7 +7,7 @@ export interface ModalProps {
   isShown: boolean;
   hide: () => void;
   modalContent?: JSX.Element;
-  headerText: string;
+  headerText?: string;
 }
 
 export const Modal: FunctionComponent<ModalProps> = ({ isShown, hide, modalContent, headerText }) => {

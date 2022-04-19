@@ -67,13 +67,13 @@ const ButtonActionsStyled = styled.button`
   }
 `;
 
-export type ButtonProps = {
+export type ButtonPropsAcions = {
   label?: string;
   icon?: string;
-  onClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+  onClick?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 };
 
-export const ButtonActions: React.FC<ButtonProps> = ({ label, icon, onClick }) => {
+export const ButtonActions: React.FC<ButtonPropsAcions> = ({ label, icon, onClick }) => {
   return (
     <ButtonActionsStyled onClick={onClick}>
       {icon && <Icon variant={icon} fontSize="1rem" />}
@@ -86,7 +86,7 @@ interface INavbar {
   handleClear: () => void;
   handleChangeTime: () => void;
   resetAllTasks: () => void;
-  handleChangeTimeSleep: () => void;
+  handleChangeTimeSleep?: () => void;
 }
 
 export const Navbar: React.FC<INavbar> = ({ handleClear, handleChangeTime, resetAllTasks, handleChangeTimeSleep }) => {

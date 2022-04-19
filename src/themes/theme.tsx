@@ -16,7 +16,7 @@ const light = '#DEE2EC';
 const opacity = '#c4c4c4';
 const shadow = '#202024';
 const success = '#53a653';
-const running = 'aqua'
+const running = '#d2d5e3'
 const failure = '#A82E2E';
 
 const theme = {

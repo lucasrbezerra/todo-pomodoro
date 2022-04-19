@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useContext, useEffect, useMemo, useState } from 'react';
 import {
   Title,
   Container,
@@ -18,43 +18,33 @@ import {
   Animation,
   Navbar,
 } from '../components';
-import { useTasks, useModal, useStorage, useWindowSize } from '../hooks';
+import { useWindowSize, useAnimation } from '../context/hooks';
 import { useTheme } from 'styled-components';
 import { ThemeType } from '../themes';
-
-const STAGES = {
-  READY: 0,
-  RUNNING: 1,
-  FINISHED: 2,
-};
-
-const MODAL_TYPE = {
-  CLEAR: 'clear',
-  INPUT_TIME: 'input-time',
-  RESET_TASKS: 'reset-tasks',
-  INPUT_TIME_SLEEP: 'input-time-sleep',
-};
+import { ModalContext, StageContext, TaskContext, TimerContext } from '../context';
+import { IAnimationContext, IModalContext, IStageContext, ITaskContext, ITimerContext } from '../interfaces';
+import { AnimationContext } from '../context/AnimationContext';
 
 const SELECTED_SWITCH = {
   TIMER: 'timer',
   TASKS: 'tasks',
 };
 
-let countdownTimeout: NodeJS.Timeout;
-
 export const Home = () => {
-  const { setTimeStorage, getStorage, KEYS_STORAGE } = useStorage();
-  const DEFAULT_TIME = getStorage(KEYS_STORAGE['TIME_VALUE']) || 25 * 60;
-  const DEFAULT_TIME_SLEEP = getStorage(KEYS_STORAGE['TIME_VALUE_SLEEP']) || 5 * 60;
-
-  const [time, setTime] = useState(DEFAULT_TIME);
-  const [timeSleep, setTimeSleep] = useState(DEFAULT_TIME_SLEEP);
-  const [animation, setAnimation] = useState(false);
-  const [auxTime, setAuxTime] = useState(DEFAULT_TIME);
-  const [auxTimeSleep, setAuxTimeSleep] = useState(DEFAULT_TIME);
+  const {
+    time,
+    openModalTimer,
+    onChangeTime,
+    onConfirmTime,
+    onKeyDownTime,
+    resetCountdown,
+    handleStartTimer,
+    setAuxTime,
+  } = useContext(TimerContext) as ITimerContext;
+  const { MODAL_TYPE, modalType, setModalType, toggle, isShown } = useContext(ModalContext) as IModalContext;
+  const { stage } = useContext(StageContext) as IStageContext;
+  const { animation } = useContext(AnimationContext) as IAnimationContext;
   const [selectedSwitch, setSelectedSwitch] = useState(SELECTED_SWITCH['TIMER']);
-  const [stage, setStage] = useState(STAGES['READY']);
-  const [modalType, setModalType] = useState<string>(MODAL_TYPE['CLEAR']);
   const [taskName, setTaskName] = useState('');
   const [error, setError] = useState(false);
   const {
@@ -68,45 +58,12 @@ export const Home = () => {
     updateToDone,
     getValidTasks,
     resetAllTasks,
-  } = useTasks();
-  const { toggle, isShown } = useModal();
+  } = useContext(TaskContext) as ITaskContext;
   const { windowDimensions } = useWindowSize();
   const theme = useTheme() as ThemeType;
 
   const minutes = Math.floor(time / 60);
   const seconds = time % 60;
-
-  const handleChangeTime = () => {
-    setModalType(MODAL_TYPE['INPUT_TIME']);
-    toggle();
-  };
-
-  const handleChangeTimeSleep = () => {
-    setModalType(MODAL_TYPE['INPUT_TIME_SLEEP']);
-    toggle();
-  }
-
-  const onConfirmTime = () => {
-    setTimeStorage(auxTime);
-    setTime(auxTime);
-    resetCountdown();
-    toggle();
-  };
-
-  const onConfirmTimeSleep = () => {
-    setTimeSleepStorage(auxTimeSleep);
-    setTimeSleep(auxTimeSleep);
-    resetCountdown();
-    toggle();
-  }
-
-  const onChangeTime = (time: number) => {
-    setAuxTime(time);
-  };
-
-  const onChangeTimeSleep = (time: number) => {
-    setAuxTimeSleep(time);
-  };
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTaskName(e.target.value);
@@ -130,79 +87,14 @@ export const Home = () => {
     }
   };
 
-  const onKeyDownTime = (event: React.KeyboardEvent<HTMLDivElement>): void => {
-    if (event.key === 'Enter') {
-      event.preventDefault();
-      event.stopPropagation();
-      onConfirmTime();
-    }
-  };
-
-  const onKeyDownTimeSleep = (event: React.KeyboardEvent<HTMLDivElement>): void => {
-    if (event.key === 'Enter') {
-      event.preventDefault();
-      event.stopPropagation();
-      onConfirmTimeSleep();
-    }
-  };
-
-  const notifyMe = () => {
-    if (!window.Notification) {
-      alert('Browser does not support notifications.');
-    } else {
-      if (Notification.permission === 'granted') {
-        new Audio('/sound/public_notification.mp3').play();
-        // Android.showToast(toast);
-        // if (!!currentTask) {
-        //   new Notification('Tarefa finalizada!', {
-        //     body: `Você terminou: ${currentTask.task} (;`,
-        //   });
-        // } else {
-        //   new Notification('Timer finalizada!', {
-        //     body: `Chegou ao final o temporizador`,
-        //   });
-        // }
-      }
-    }
-  };
-
-  useEffect(() => {
-    Notification.requestPermission();
-  }, []);
-
-  useEffect(() => {
-    if (stage === STAGES['RUNNING'] && time > 0) {
-      countdownTimeout = setTimeout(() => {
-        setTime(time - 1);
-      }, 1000);
-    } else if (stage === STAGES['RUNNING'] && time === 0) {
-      setStage(STAGES['FINISHED']);
-      setAnimation(true);
-      setTimeout(() => {
-        setAnimation(false);
-      }, 2500);
-      notifyMe();
-    }
-  }, [stage, time]);
-
-  const handleStartTimer = () => {
-    setStage(STAGES['RUNNING']);
-  };
-
-  const resetCountdown = () => {
-    clearTimeout(countdownTimeout);
-    setStage(STAGES['READY']);
-    setTime(getStorage(KEYS_STORAGE['TIME_VALUE']) || DEFAULT_TIME);
+  const handleClear = () => {
+    setModalType(MODAL_TYPE['CLEAR']);
+    toggle();
   };
 
   const handleNext = () => {
     jumpTask();
     resetCountdown();
-  };
-
-  const handleClear = () => {
-    setModalType(MODAL_TYPE['CLEAR']);
-    toggle();
   };
 
   const handleResetTasks = () => {
@@ -213,7 +105,7 @@ export const Home = () => {
   const handleResetAllTasks = () => {
     resetAllTasks();
     toggle();
-  }
+  };
 
   const handleCleanAll = () => {
     clearTasks();
@@ -267,7 +159,7 @@ export const Home = () => {
       case MODAL_TYPE['INPUT_TIME']:
         return (
           <Content width="250px">
-            <InputTime error={error} value={time} onChange={onChangeTime} width="100%" onKeyDown={onKeyDownTime} />
+            <InputTime error={error} value={time} onChange={setAuxTime} width="100%" onKeyDown={onKeyDownTime} />
             <ConfirmationModal onConfirm={onConfirmTime} haveNoButton={false} />
           </Content>
         );
@@ -279,13 +171,32 @@ export const Home = () => {
             message="Tem certeza que quer resetar todas as tarefas?"
           />
         );
+      // case MODAL_TYPE['INPUT_TIME_SLEEP']:
+      //   return (
+      //     <Content width="250px">
+      //       <InputTime
+      //         error={error}
+      //         value={timeSleep}
+      //         onChange={onChangeTimeSleep}
+      //         width="100%"
+      //         onKeyDown={onKeyDownTimeSleep}
+      //       />
+      //       <ConfirmationModal onConfirm={onConfirmTimeSleep} haveNoButton={false} />
+      //     </Content>
+      //   );
+    }
+  }, [modalType]);
+
+  const handleModalTypeTitle = useMemo(() => {
+    switch (modalType) {
+      case MODAL_TYPE['CLEAR']:
+        return 'Limpar Tudo?';
+      case MODAL_TYPE['INPUT_TIME']:
+        return 'Escolha um tempo de trabalho';
+      case MODAL_TYPE['RESET_TASKS']:
+        return 'Reiniciar Tarefas?';
       case MODAL_TYPE['INPUT_TIME_SLEEP']:
-        return (
-          <Content width="250px">
-            <InputTime error={error} value={timeSleep} onChange={onChangeTimeSleep} width="100%" onKeyDown={onKeyDownTimeSleep} />
-            <ConfirmationModal onConfirm={onConfirmTimeSleep} haveNoButton={false} />
-          </Content>
-        );
+        return 'Escolha um tempo de descanso';
     }
   }, [modalType]);
 
@@ -324,7 +235,7 @@ export const Home = () => {
         return (
           <Content width="100%" mt="2.5rem" justifyContent="center" alignItems="center" display="flex">
             <Button
-              width="200px"
+              width="160px"
               height="50px"
               label="Pronto!"
               mIcon="0 .35rem 0 0"
@@ -334,7 +245,7 @@ export const Home = () => {
             />
             <Button
               width="120px"
-              height="30px"
+              height="35px"
               label="Repita!"
               mIcon="0 .35rem 0 0"
               icon="fas fa-redo"
@@ -362,7 +273,12 @@ export const Home = () => {
   return (
     <Container>
       {animation && <Animation />}
-      <Navbar handleClear={handleClear} handleChangeTime={handleChangeTime} handleChangeTimeSleep={handleChangeTimeSleep} resetAllTasks={handleResetTasks} />
+      <Navbar
+        handleClear={handleClear}
+        resetAllTasks={handleResetTasks}
+        handleChangeTime={openModalTimer}
+        // handleChangeTimeSleep={handleChangeTimeSleep}
+      />
       <Switch selectedSwitch={selectedSwitch} setSelectedSwitch={setSelectedSwitch} SELECTED_SWITCH={SELECTED_SWITCH} />
       {chooseLayout(SELECTED_SWITCH['TIMER']) && (
         <Box>
@@ -400,7 +316,7 @@ export const Home = () => {
               </Content>
             )}
           </Content>
-          <Timer minutes={minutes} seconds={seconds} onClick={handleChangeTime} />
+          {<Timer minutes={minutes} seconds={seconds} onClick={openModalTimer} />}
           {handleStageButtons}
         </Box>
       )}
@@ -429,16 +345,7 @@ export const Home = () => {
           />
         </Box>
       )}
-      <Modal
-        isShown={isShown}
-        hide={toggle}
-        headerText={modalType === MODAL_TYPE['CLEAR'] ? 'Limpar tudo' : 'Escolha um tempo'}
-        modalContent={handleModalType}
-      />
+      <Modal isShown={isShown} hide={toggle} headerText={handleModalTypeTitle} modalContent={handleModalType} />
     </Container>
   );
 };
-function setTimeSleepStorage(auxTime: any) {
-  throw new Error('Function not implemented.');
-}
-

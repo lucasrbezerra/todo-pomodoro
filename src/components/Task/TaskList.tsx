@@ -1,6 +1,6 @@
 import { Task, Content, Button, Modal, ConfirmationModal, Input } from '../../components';
 import { ITask } from '../../interfaces';
-import { useModal } from '../../hooks';
+import { useModal } from '../../context/hooks';
 import { useState } from 'react';
 import { AnimatedList } from 'react-animated-list';
 
