@@ -16,8 +16,10 @@ const light = '#DEE2EC';
 const opacity = '#c4c4c4';
 const shadow = '#202024';
 const success = '#53a653';
-const running = '#d2d5e3'
+const running = '#d2d5e3';
 const failure = '#A82E2E';
+const sleepPrimary = '#662e5f';
+const sleepSecondary = '#994568';
 
 const theme = {
   fontSizes,
@@ -34,6 +36,8 @@ const theme = {
     success,
     running,
     failure,
+    sleepPrimary,
+    sleepSecondary
   },
 };
 

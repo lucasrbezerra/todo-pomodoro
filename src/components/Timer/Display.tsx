@@ -1,9 +1,12 @@
 import styled from 'styled-components';
-import { layout, LayoutProps } from 'styled-system';
+import { layout, LayoutProps, color } from 'styled-system';
 
+type ColorsProps = {
+  bg?: string;
+};
 type DisplayItemProps = LayoutProps;
 
-const DisplayItem = styled.div<DisplayItemProps>`
+const DisplayItem = styled.div<DisplayItemProps | ColorsProps>`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -13,11 +16,22 @@ const DisplayItem = styled.div<DisplayItemProps>`
   background: ${({ theme }) => theme.colors.bgTask};
   border-radius: 0.5rem;
   cursor: pointer;
-  @media (max-width: 767px) {
+  @media screen and (max-width: 576px) {
     width: 60px;
     height: 60px;
   }
+  @media screen and (min-width: 576px) and (max-width: 768px) {
+    width: 70px;
+    height: 70px;
+  }
+  @media screen and (min-width: 768px) and (max-width: 992px) {
+  }
+  @media screen and (min-width: 992px) and (max-width: 1200px) {
+  }
+  @media screen and (min-width: 1200px) and (max-width: 1400px) {
+  }
   ${layout}
+  ${color}
 `;
 
 const ValueDisplay = styled.h1`
@@ -34,11 +48,12 @@ interface IDisplayProps {
   value: string;
   height?: string;
   width?: string;
+  bg?: string;
 }
 
-export const Display: React.FC<IDisplayProps> = ({ value, height, width }) => {
+export const Display: React.FC<IDisplayProps> = ({ value, height, width, bg }) => {
   return (
-    <DisplayItem height={height} width={width}>
+    <DisplayItem height={height} width={width} bg={bg}>
       <ValueDisplay>{value}</ValueDisplay>
     </DisplayItem>
   );

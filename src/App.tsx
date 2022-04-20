@@ -8,18 +8,18 @@ export const App = () => {
   return (
     <Theme>
       <AnimationProvider>
-        <StorageProvider>
-          <StageProvider>
-            <ModalProvider>
+        <StageProvider>
+          <ModalProvider>
+            <StorageProvider>
               <TaskProvider>
                 <TimerProvider>
                   <GlobalStyles />
                   <Router />
                 </TimerProvider>
               </TaskProvider>
-            </ModalProvider>
-          </StageProvider>
-        </StorageProvider>
+            </StorageProvider>
+          </ModalProvider>
+        </StageProvider>
       </AnimationProvider>
     </Theme>
   );

@@ -3,10 +3,11 @@ import { Content, Dots, Display } from '../../components';
 interface ITimerProps {
   minutes: number;
   seconds: number;
+  bg?: string;
   onClick?: () => void;
 }
 
-export const Timer: React.FC<ITimerProps> = ({ minutes, seconds, onClick }) => {
+export const Timer: React.FC<ITimerProps> = ({ minutes, seconds, onClick, bg }) => {
   const [minuteLeft, minuteRight] = String(minutes).padStart(2, '0').split('');
   const [secondLeft, secondRight] = String(seconds).padStart(2, '0').split('');
   return (
@@ -19,11 +20,11 @@ export const Timer: React.FC<ITimerProps> = ({ minutes, seconds, onClick }) => {
       width="100%"
       onClick={onClick}
     >
-      <Display value={minuteLeft} />
-      <Display value={minuteRight} />
+      <Display value={minuteLeft} bg={bg} />
+      <Display value={minuteRight} bg={bg} />
       <Dots />
-      <Display value={secondLeft} />
-      <Display value={secondRight} />
+      <Display value={secondLeft} bg={bg} />
+      <Display value={secondRight} bg={bg} />
     </Content>
   );
 };

@@ -2,7 +2,7 @@ import React, { createContext } from 'react';
 import { useStages } from './hooks';
 import { IStageContext } from '../interfaces';
 
-const StageContext = createContext<IStageContext | null>(null);
+const StageContext = createContext<IStageContext>({} as IStageContext);
 
 const StageProvider: React.FC<React.ReactNode> = ({ children }) => {
   const { STAGES, stage, setStage } = useStages();

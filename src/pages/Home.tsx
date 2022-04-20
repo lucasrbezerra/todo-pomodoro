@@ -18,12 +18,11 @@ import {
   Animation,
   Navbar,
 } from '../components';
-import { useWindowSize, useAnimation } from '../context/hooks';
+import { useWindowSize } from '../context/hooks';
 import { useTheme } from 'styled-components';
 import { ThemeType } from '../themes';
-import { ModalContext, StageContext, TaskContext, TimerContext } from '../context';
+import { ModalContext, StageContext, TaskContext, TimerContext, AnimationContext } from '../context';
 import { IAnimationContext, IModalContext, IStageContext, ITaskContext, ITimerContext } from '../interfaces';
-import { AnimationContext } from '../context/AnimationContext';
 
 const SELECTED_SWITCH = {
   TIMER: 'timer',
@@ -33,16 +32,22 @@ const SELECTED_SWITCH = {
 export const Home = () => {
   const {
     time,
+    timeSleep,
     openModalTimer,
+    openModalTimerSleep,
     onChangeTime,
+    onChangeTimeSleep,
     onConfirmTime,
+    onConfirmTimeSleep,
     onKeyDownTime,
+    onKeyDownTimeSleep,
     resetCountdown,
+    resetCountdownSleep,
     handleStartTimer,
-    setAuxTime,
+    handleStartTimerSleep,
   } = useContext(TimerContext) as ITimerContext;
   const { MODAL_TYPE, modalType, setModalType, toggle, isShown } = useContext(ModalContext) as IModalContext;
-  const { stage } = useContext(StageContext) as IStageContext;
+  const { stage, setStage, STAGES } = useContext(StageContext) as IStageContext;
   const { animation } = useContext(AnimationContext) as IAnimationContext;
   const [selectedSwitch, setSelectedSwitch] = useState(SELECTED_SWITCH['TIMER']);
   const [taskName, setTaskName] = useState('');
@@ -64,6 +69,9 @@ export const Home = () => {
 
   const minutes = Math.floor(time / 60);
   const seconds = time % 60;
+
+  const minutesSleep = Math.floor(timeSleep / 60);
+  const secondsSleep = timeSleep % 60;
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTaskName(e.target.value);
@@ -95,6 +103,7 @@ export const Home = () => {
   const handleNext = () => {
     jumpTask();
     resetCountdown();
+    resetCountdownSleep();
   };
 
   const handleResetTasks = () => {
@@ -104,12 +113,15 @@ export const Home = () => {
 
   const handleResetAllTasks = () => {
     resetAllTasks();
+    resetCountdown();
+    resetCountdownSleep();
     toggle();
   };
 
   const handleCleanAll = () => {
     clearTasks();
     resetCountdown();
+    resetCountdownSleep();
     toggle();
   };
 
@@ -123,28 +135,78 @@ export const Home = () => {
   };
 
   const handleDone = () => {
-    resetCountdown();
+    // resetCountdown();
     if (!!currentTask) {
       updateToDone(currentTask, true);
       jumpTask();
+      setStage(STAGES['SLEEP_START']);
     }
   };
+  
+  const handleDoneSleep = () => {
+    setStage(STAGES['START']);
+    resetCountdownSleep();
+  }
 
   const chooseLayout = (value: string) => {
     const { width } = windowDimensions;
     return width > 1024 || value === selectedSwitch;
   };
 
+  useEffect(() => {
+    console.log({stage});
+  },[stage]);
+
   const handleStageTitle = useMemo(() => {
     switch (stage) {
-      case 0:
-        return <Title>Pronto!</Title>;
-      case 1:
+      case STAGES['START']:
+        return <Title>Preparado?</Title>;
+      case STAGES['RUNNING']:
         return <Title>Trabalhando!</Title>;
-      case 2:
-        return <Title>Mais uma?!</Title>;
+      case STAGES['FINISHED_WORK']:
+        return <Title>Pronto?</Title>;
+      case STAGES['SLEEP_START']:
+        return <Title>Hora de descansar?</Title>;
+      case STAGES['SLEEPING']:
+        return <Title>Descansando ZzZ</Title>;
+      case STAGES['FINISHED_SLEEP']:
+        return <Title>Mais uma?</Title>;
     }
-  }, [handleStartTimer, handleDone, resetCountdown, stage]);
+  }, [handleStartTimer, handleStartTimerSleep, handleDone, handleDoneSleep,  resetCountdown, resetCountdownSleep, stage]);
+
+  const TimerStages = useMemo(() => {
+    switch (stage) {
+      case STAGES['SLEEP_START']:
+        return (
+          <Timer
+            minutes={minutesSleep}
+            seconds={secondsSleep}
+            onClick={openModalTimerSleep}
+            bg={`${theme.colors.sleepPrimary}`}
+          />
+        );
+      case STAGES['SLEEPING']:
+        return (
+          <Timer
+            minutes={minutesSleep}
+            seconds={secondsSleep}
+            onClick={openModalTimerSleep}
+            bg={`${theme.colors.sleepPrimary}`}
+          />
+        );
+      case STAGES['FINISHED_SLEEP']:
+        return (
+          <Timer
+            minutes={minutesSleep}
+            seconds={secondsSleep}
+            onClick={openModalTimerSleep}
+            bg={`${theme.colors.sleepPrimary}`}
+          />
+        );
+      default:
+        return <Timer minutes={minutes} seconds={seconds} onClick={openModalTimer} />;
+    }
+  }, [stage, time, timeSleep]);
 
   const handleModalType = useMemo(() => {
     switch (modalType) {
@@ -159,7 +221,7 @@ export const Home = () => {
       case MODAL_TYPE['INPUT_TIME']:
         return (
           <Content width="250px">
-            <InputTime error={error} value={time} onChange={setAuxTime} width="100%" onKeyDown={onKeyDownTime} />
+            <InputTime error={error} value={time} onChange={onChangeTime} width="100%" onKeyDown={onKeyDownTime} />
             <ConfirmationModal onConfirm={onConfirmTime} haveNoButton={false} />
           </Content>
         );
@@ -171,19 +233,19 @@ export const Home = () => {
             message="Tem certeza que quer resetar todas as tarefas?"
           />
         );
-      // case MODAL_TYPE['INPUT_TIME_SLEEP']:
-      //   return (
-      //     <Content width="250px">
-      //       <InputTime
-      //         error={error}
-      //         value={timeSleep}
-      //         onChange={onChangeTimeSleep}
-      //         width="100%"
-      //         onKeyDown={onKeyDownTimeSleep}
-      //       />
-      //       <ConfirmationModal onConfirm={onConfirmTimeSleep} haveNoButton={false} />
-      //     </Content>
-      //   );
+      case MODAL_TYPE['INPUT_TIME_SLEEP']:
+        return (
+          <Content width="250px">
+            <InputTime
+              error={error}
+              value={timeSleep}
+              onChange={onChangeTimeSleep}
+              width="100%"
+              onKeyDown={onKeyDownTimeSleep}
+            />
+            <ConfirmationModal onConfirm={onConfirmTimeSleep} haveNoButton={false} />
+          </Content>
+        );
     }
   }, [modalType]);
 
@@ -202,7 +264,7 @@ export const Home = () => {
 
   const handleStageButtons = useMemo(() => {
     switch (stage) {
-      case 0:
+      case STAGES['START']:
         return (
           <Content width="100%" mt="2.5rem" justifyContent="center" alignItems="center" display="flex">
             <Button
@@ -216,7 +278,7 @@ export const Home = () => {
           </Content>
         );
 
-      case 1:
+      case STAGES['RUNNING']:
         return (
           <Content width="100%" mt="2.5rem" justifyContent="center" alignItems="center" display="flex">
             <Button
@@ -231,7 +293,7 @@ export const Home = () => {
           </Content>
         );
 
-      case 2:
+      case STAGES['FINISHED_WORK']:
         return (
           <Content width="100%" mt="2.5rem" justifyContent="center" alignItems="center" display="flex">
             <Button
@@ -254,6 +316,48 @@ export const Home = () => {
             />
           </Content>
         );
+      case STAGES['SLEEP_START']:
+        return (
+          <Content width="100%" mt="2.5rem" justifyContent="center" alignItems="center" display="flex">
+            <Button
+              width="200px"
+              height="50px"
+              label="Iniciar"
+              mIcon="0 .35rem 0 0"
+              bg={`${theme.colors.sleepSecondary}`}
+              onClick={handleStartTimerSleep}
+            />
+          </Content>
+        );
+
+      case STAGES['SLEEPING']:
+        return (
+          <Content width="100%" mt="2.5rem" justifyContent="center" alignItems="center" display="flex">
+            <Button
+              width="200px"
+              height="50px"
+              label="Parar"
+              icon="fas fa-ban"
+              mIcon="0 .35rem 0 0"
+              bg={`${theme.colors.failure}`}
+              onClick={resetCountdownSleep}
+            />
+          </Content>
+        );
+      case STAGES['FINISHED_SLEEP']:
+        return (
+          <Content width="100%" mt="2.5rem" justifyContent="center" alignItems="center" display="flex">
+            <Button
+              width="160px"
+              height="50px"
+              label="Descansado!"
+              mIcon="0 .35rem 0 0"
+              icon="far fa-check-circle"
+              bg={`${theme.colors.success}`}
+              onClick={handleDoneSleep}
+            />
+          </Content>
+        );
 
       default:
         return (
@@ -268,7 +372,7 @@ export const Home = () => {
           </Content>
         );
     }
-  }, [handleStartTimer, handleDone, resetCountdown, stage]);
+  }, [handleStartTimer, handleStartTimerSleep, handleDone, handleDoneSleep,  resetCountdown, resetCountdownSleep, stage]);
 
   return (
     <Container>
@@ -277,7 +381,7 @@ export const Home = () => {
         handleClear={handleClear}
         resetAllTasks={handleResetTasks}
         handleChangeTime={openModalTimer}
-        // handleChangeTimeSleep={handleChangeTimeSleep}
+        handleChangeTimeSleep={openModalTimerSleep}
       />
       <Switch selectedSwitch={selectedSwitch} setSelectedSwitch={setSelectedSwitch} SELECTED_SWITCH={SELECTED_SWITCH} />
       {chooseLayout(SELECTED_SWITCH['TIMER']) && (
@@ -316,7 +420,7 @@ export const Home = () => {
               </Content>
             )}
           </Content>
-          {<Timer minutes={minutes} seconds={seconds} onClick={openModalTimer} />}
+          {TimerStages}
           {handleStageButtons}
         </Box>
       )}

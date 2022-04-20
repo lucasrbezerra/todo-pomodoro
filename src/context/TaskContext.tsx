@@ -2,7 +2,7 @@ import React, { createContext } from 'react';
 import { useTasks } from './hooks';
 import { ITaskContext } from '../interfaces';
 
-const TaskContext = createContext<ITaskContext | null>(null);
+const TaskContext = createContext<ITaskContext>({} as ITaskContext);
 
 const TaskProvider: React.FC<React.ReactNode> = ({ children }) => {
   const {
