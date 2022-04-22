@@ -120,6 +120,7 @@ export const InputTime: React.FC<IInputProps> = ({ value, onChange, error, onKey
     >
       <Content display="flex" alignItems="center" m="0 .25rem" justifyContent="center">
         <CustomInput
+          type="number" 
           pattern="\d*"
           autoFocus
           name="field-1"
@@ -134,6 +135,7 @@ export const InputTime: React.FC<IInputProps> = ({ value, onChange, error, onKey
       </Content>
       <Content display="flex" alignItems="center" m="0 .25rem" justifyContent="center">
         <CustomInput
+          type="number" 
           pattern="\d*"
           autoFocus={false}
           name="field-2"
@@ -149,6 +151,7 @@ export const InputTime: React.FC<IInputProps> = ({ value, onChange, error, onKey
       <Dots height="0.35rem" width="0.35rem" />
       <Content display="flex" alignItems="center" m="0 .25rem" justifyContent="center">
         <CustomInput
+          type="number" 
           pattern="\d*"
           autoFocus={false}
           name="field-3"
@@ -163,6 +166,7 @@ export const InputTime: React.FC<IInputProps> = ({ value, onChange, error, onKey
       </Content>
       <Content display="flex" alignItems="center" m="0 .25rem" justifyContent="center">
         <CustomInput
+          type="number" 
           pattern="\d*"
           autoFocus={false}
           name="field-4"
