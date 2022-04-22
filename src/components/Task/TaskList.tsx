@@ -1,8 +1,9 @@
 import { Task, Content, Button, Modal, ConfirmationModal, Input } from '../../components';
-import { ITask } from '../../interfaces';
+import { IModalContext, ITask } from '../../interfaces';
 import { useModal } from '../../context/hooks';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { AnimatedList } from 'react-animated-list';
+import { ModalContext } from '../../context';
 
 type TaskListProps = {
   tasks: ITask[];
@@ -17,12 +18,20 @@ const MODAL_TYPE = {
   EDIT: 'edit',
 };
 
+const initialValues = {
+  MODAL_TYPE: MODAL_TYPE,
+  isShown: false,
+  modalType: MODAL_TYPE['DELETE'],
+  setModalType: (value: string) => {},
+  toggle: () => {},
+};
+
 export const TaskList: React.FC<TaskListProps> = ({ tasks, currentTask, deleteTask, editTask, resetCountdown }) => {
   const [selectedTask, setSelectedTask] = useState<ITask | any>();
   const [error, setError] = useState(false);
   const [taskName, setTaskName] = useState<string>('');
+  const { isShown, toggle } = useModal(initialValues);
   const [modalType, setModalType] = useState<string>(MODAL_TYPE['DELETE']);
-  const { isShown, toggle } = useModal();
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTaskName(e.target.value);

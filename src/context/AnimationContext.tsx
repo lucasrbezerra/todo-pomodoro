@@ -2,7 +2,13 @@ import React, { createContext } from 'react';
 import { useAnimation } from './hooks';
 import { IAnimationContext } from '../interfaces';
 
-const AnimationContext = createContext<IAnimationContext>({} as IAnimationContext);
+const initialValues = {
+  animation: false,
+  setAnimation: () => {},
+  notifyMe: () => {},
+}
+
+const AnimationContext = createContext<IAnimationContext>(initialValues);
 
 const AnimationProvider: React.FC<React.ReactNode> = ({ children }) => {
   const { animation, setAnimation, notifyMe } = useAnimation();

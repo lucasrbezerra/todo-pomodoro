@@ -1,28 +1,20 @@
 import { useContext, useEffect, useState } from 'react';
-import { IAnimationContext, IModalContext, IStageContext, IStorageContext } from '../../interfaces';
-import { AnimationContext } from '../AnimationContext';
-import { ModalContext } from '../ModalContext';
-import { StageContext } from '../StageContext';
-import { StorageContext } from '../StorageContext';
-import { useStorage, useStages } from '../hooks';
+import { ModalContext, StageContext, StorageContext, TaskContext } from '../../context';
+import { IModalContext, IStageContext, IStorageContext, ITaskContext } from '../../interfaces';
 
-export const useTimer = () => {
-  const { MODAL_TYPE, setModalType, toggle } = useContext(ModalContext) as IModalContext;
-  const { stage, setStage } = useContext(StageContext) as IStageContext;
-  const { STAGES } = useStages();
-  const { getStorage, setTimeStorage, setTimeSleepStorage } = useContext(StorageContext) as IStorageContext;
-  const { KEYS_STORAGE } = useStorage();
-  const { setAnimation, notifyMe } = useContext(AnimationContext) as IAnimationContext;
-  const DEFAULT_TIME = getStorage(KEYS_STORAGE['TIME_VALUE']) || 25 * 60;
-  const DEFAULT_TIME_SLEEP = getStorage(KEYS_STORAGE['TIME_VALUE_SLEEP']) || 5 * 60;
+export const useTimer = (DEFAULT_TIMER: number, DEFAULT_TIMER_SLEEP: number) => {
+  const { stage, setStage, STAGES } = useContext(StageContext) as IStageContext;
+  const { setTimeStorage, setTimeSleepStorage } = useContext(StorageContext) as IStorageContext;
+  const { setModalType, toggle, MODAL_TYPE } = useContext(ModalContext) as IModalContext;
+  const { currentTask, jumpTask, updateToDone } = useContext(TaskContext) as ITaskContext;
 
   let countdownTimeout: NodeJS.Timeout;
   let countdownTimeoutSleeping: NodeJS.Timeout;
 
-  const [time, setTime] = useState(DEFAULT_TIME);
-  const [auxTime, setAuxTime] = useState(DEFAULT_TIME);
-  const [timeSleep, setTimeSleep] = useState(DEFAULT_TIME_SLEEP);
-  const [auxTimeSleep, setAuxTimeSleep] = useState(DEFAULT_TIME_SLEEP);
+  const [time, setTime] = useState(DEFAULT_TIMER);
+  const [auxTime, setAuxTime] = useState(DEFAULT_TIMER);
+  const [timeSleep, setTimeSleep] = useState(DEFAULT_TIMER_SLEEP);
+  const [auxTimeSleep, setAuxTimeSleep] = useState(DEFAULT_TIMER_SLEEP);
 
   useEffect(() => {
     if (stage === STAGES['RUNNING'] && time > 0) {
@@ -31,84 +23,26 @@ export const useTimer = () => {
       }, 1000);
     } else if (stage === STAGES['RUNNING'] && time === 0) {
       setStage(STAGES['FINISHED_WORK']);
-      // setAnimation(true);
-      // setTimeout(() => {
-      //   setAnimation(false);
-      // }, 2500);
-      notifyMe();
     } else if (stage === STAGES['SLEEPING'] && timeSleep > 0) {
       countdownTimeoutSleeping = setTimeout(() => {
         setTimeSleep(timeSleep - 1);
       }, 1000);
     } else if (stage === STAGES['SLEEPING'] && timeSleep === 0) {
       setStage(STAGES['FINISHED_SLEEP']);
-      // setAnimation(true);
-      // setTimeout(() => {
-      //   setAnimation(false);
-      // }, 2500);
-      notifyMe();
     }
   }, [stage, time, timeSleep]);
 
-  const onChangeTime = (time: number) => {
-    setAuxTime(time);
-  };
-
-  const onChangeTimeSleep = (time: number) => {
-    setAuxTimeSleep(time);
-  };
-
-  const openModalTimer = () => {
-    setModalType(MODAL_TYPE['INPUT_TIME']);
-    toggle();
-  };
-
-  const openModalTimerSleep = () => {
-    setModalType(MODAL_TYPE['INPUT_TIME_SLEEP']);
-    toggle();
-  };
-
-  const handleStartTimer = () => {
-    setStage(STAGES['RUNNING']);
-  };
-
-  const handleStartTimerSleep = () => {
-    setStage(STAGES['SLEEPING']);
-  };
-
-  const resetCountdown = () => {
-    clearTimeout(countdownTimeout);
-    setStage(STAGES['START']);
-    setTime(getStorage(KEYS_STORAGE['TIME_VALUE']) || DEFAULT_TIME);
-  };
-
-  const resetCountdownSleep = () => {
-    clearTimeout(countdownTimeoutSleeping);
-    setStage(STAGES['START']);
-    setTime(getStorage(KEYS_STORAGE['TIME_VALUE']) || DEFAULT_TIME);
-    setTimeSleep(getStorage(KEYS_STORAGE['TIME_VALUE_SLEEP']) || DEFAULT_TIME_SLEEP);
+  /* Work Timer */
+  const onChangeTime = (t: number) => {
+    setAuxTime(t);
   };
 
   const onConfirmTime = () => {
-    // setTimeStorage(auxTime);
-    setTime(auxTime);
-    resetCountdown();
-    toggle();
-  };
-
-  const onConfirmTimeSleep = () => {
-    setTime(auxTime);
-    resetCountdown();
-    toggle();
-  };
-
-  useEffect(() => {
     setTimeStorage(auxTime);
-  }, [auxTime]);
-
-  useEffect(() => {
-    setTimeSleepStorage(auxTimeSleep);
-  }, [auxTimeSleep]);
+    setTime(auxTime);
+    toggle();
+    resetCountdown();
+  };
 
   const onKeyDownTime = (event: React.KeyboardEvent<HTMLDivElement>): void => {
     if (event.key === 'Enter') {
@@ -116,6 +50,42 @@ export const useTimer = () => {
       event.stopPropagation();
       onConfirmTime();
     }
+  };
+
+  const openModalTimer = () => {
+    setModalType(MODAL_TYPE['INPUT_TIME']);
+    toggle();
+  };
+
+  const handleStartTimer = () => {
+    setStage(STAGES['RUNNING']);
+  };
+
+  const resetCountdown = () => {
+    clearTimeout(countdownTimeout);
+    setStage(STAGES['START']);
+    setTime(auxTime);
+  };
+
+  const handleDone = () => {
+    if (!!currentTask) {
+      updateToDone(currentTask, true);
+      jumpTask();
+    }
+    setStage(STAGES['SLEEP_START']);
+  };
+
+  /* Sleep Timer */
+  const onChangeTimeSleep = (time: number) => {
+    setAuxTimeSleep(time);
+  };
+
+  const onConfirmTimeSleep = () => {
+    clearTimeout(countdownTimeoutSleeping);
+    setTimeSleepStorage(auxTimeSleep);
+    setTime(auxTime);
+    setTimeSleep(auxTimeSleep);
+    toggle();
   };
 
   const onKeyDownTimeSleep = (event: React.KeyboardEvent<HTMLDivElement>): void => {
@@ -126,22 +96,46 @@ export const useTimer = () => {
     }
   };
 
+  const openModalTimerSleep = () => {
+    setModalType(MODAL_TYPE['INPUT_TIME_SLEEP']);
+    toggle();
+  };
+
+  const handleStartTimerSleep = () => {
+    setStage(STAGES['SLEEPING']);
+  };
+
+  const resetCountdownSleep = () => {
+    clearTimeout(countdownTimeoutSleeping);
+    setTime(DEFAULT_TIMER);
+    setTimeSleep(auxTimeSleep);
+    setStage(STAGES['START']);
+  };
+
+  const handleDoneSleep = () => {
+    setStage(STAGES['START']);
+    resetCountdownSleep();
+  };
+
   return {
     time,
     timeSleep,
     auxTime,
     auxTimeSleep,
-    openModalTimer,
-    openModalTimerSleep,
+    setAuxTimeSleep,
     handleStartTimer,
     handleStartTimerSleep,
     resetCountdown,
     resetCountdownSleep,
-    onKeyDownTime,
-    onKeyDownTimeSleep,
+    handleDone,
+    handleDoneSleep,
+    openModalTimer,
+    openModalTimerSleep,
     onChangeTime,
     onChangeTimeSleep,
     onConfirmTime,
     onConfirmTimeSleep,
+    onKeyDownTime,
+    onKeyDownTimeSleep,
   };
 };

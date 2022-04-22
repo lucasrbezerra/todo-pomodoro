@@ -1,9 +1,7 @@
-import { Dispatch, SetStateAction } from "react";
-
 export interface IModalContext {
   isShown: boolean;
   modalType: string;
-  setModalType: Dispatch<SetStateAction<string>>;
+  setModalType: (value: string) => void;
   MODAL_TYPE: any;
   toggle: () => void;
 }

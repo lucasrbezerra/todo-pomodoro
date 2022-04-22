@@ -7,20 +7,20 @@ import { AnimationProvider } from './context/AnimationContext';
 export const App = () => {
   return (
     <Theme>
-      <AnimationProvider>
-        <StageProvider>
-          <ModalProvider>
-            <StorageProvider>
+      <StorageProvider>
+        <AnimationProvider>
+          <StageProvider>
+            <ModalProvider>
               <TaskProvider>
                 <TimerProvider>
                   <GlobalStyles />
                   <Router />
                 </TimerProvider>
               </TaskProvider>
-            </StorageProvider>
-          </ModalProvider>
-        </StageProvider>
-      </AnimationProvider>
+            </ModalProvider>
+          </StageProvider>
+        </AnimationProvider>
+      </StorageProvider>
     </Theme>
   );
 };

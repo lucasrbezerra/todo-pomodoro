@@ -1,21 +1,17 @@
-import { useState } from 'react';
-export const useModal = () => {
-  const MODAL_TYPE = {
-    CLEAR: 'clear',
-    RESET_TASKS: 'reset-tasks',
-    INPUT_TIME: 'input-time',
-    INPUT_TIME_SLEEP: 'input-time-sleep',
-  };
+import { useState } from "react";
+import { IModalContext } from "../../interfaces";
 
-  const [isShown, setIsShown] = useState<boolean>(false);
-  const [modalType, setModalType] = useState<string>(MODAL_TYPE['CLEAR']);
+export const useModal = (initialValues: IModalContext) => {
+  const [isShown, setIsShown] = useState<boolean>(initialValues.isShown);
+  const [modalType, setModalType] = useState<string>(
+    initialValues.MODAL_TYPE["CLEAR"]
+  );
   const toggle = () => setIsShown(!isShown);
 
   return {
     isShown,
     modalType,
     setModalType,
-    MODAL_TYPE,
     toggle,
   };
 };

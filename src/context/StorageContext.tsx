@@ -1,28 +1,35 @@
-import React, { createContext } from 'react';
-import { useStorage } from './hooks';
-import { IStorageContext } from '../interfaces';
+import React, { createContext } from "react";
+import { useStorage } from "./hooks";
+import { IStorageContext } from "../interfaces";
 
-// const initialValues = {
-//   KEYS_STORAGE: {
-//     TIME_VALUE: 'time-value',
-//     TIME_VALUE_SLEEP: 'time-value-sleep',
-//     TASKS: 'tasks',
-//   },
-// };
+const KEYS_STORAGE = {
+  TIME_VALUE: "time-value",
+  TIME_VALUE_SLEEP: "time-value-sleep",
+  TASKS: "tasks",
+};
 
-const StorageContext = createContext<IStorageContext>({} as IStorageContext);
+const initialValues = {
+  KEYS_STORAGE,
+  getStorage: () => {},
+  setTasksStorage: () => {},
+  setTimeStorage: () => {},
+  setTimeSleepStorage: () => {},
+};
+
+const StorageContext = createContext<IStorageContext>(initialValues);
 
 const StorageProvider: React.FC<React.ReactNode> = ({ children }) => {
-  const { setTimeStorage, setTasksStorage, setTimeSleepStorage, getStorage, KEYS_STORAGE } = useStorage();
+  const { setTimeStorage, setTasksStorage, setTimeSleepStorage, getStorage } =
+    useStorage(KEYS_STORAGE);
 
   return (
     <StorageContext.Provider
       value={{
+        KEYS_STORAGE,
         setTimeStorage,
         setTasksStorage,
         setTimeSleepStorage,
         getStorage,
-        KEYS_STORAGE,
       }}
     >
       {children}

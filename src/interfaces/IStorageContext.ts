@@ -1,9 +1,9 @@
-import { ITask } from './ITask';
+import { ITask } from "./ITask";
 
 export interface IStorageContext {
-  setTimeStorage: (value: string) => void;
+  setTimeStorage: (value: number) => void;
   setTasksStorage: (value: ITask[]) => void;
-  setTimeSleepStorage: (value: string) => void;
+  setTimeSleepStorage: (value: number) => void;
   getStorage: any;
   KEYS_STORAGE: any;
 }

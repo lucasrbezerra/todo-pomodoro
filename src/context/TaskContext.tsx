@@ -1,8 +1,30 @@
 import React, { createContext } from 'react';
 import { useTasks } from './hooks';
-import { ITaskContext } from '../interfaces';
+import { ITask, ITaskContext } from '../interfaces';
+// import { useStorage } from '../context/hooks';
 
-const TaskContext = createContext<ITaskContext>({} as ITaskContext);
+const getStorage = (key: string) => {
+  let value = localStorage.getItem(key);
+  if (typeof value === "string") {
+    const parse = JSON.parse(value);
+    return parse;
+  }
+};
+
+const initialValues = {
+  tasks: getStorage('tasks'),
+  currentTask: getStorage('tasks')[0],
+  createTask: (taskName: string) => {},
+  jumpTask: () => {},
+  deleteTask: (taskId: number) => {},
+  editTask: (taskId: number, isDone: boolean, newTask: string) => {},
+  clearTasks: () => {},
+  updateToDone: (task: ITask, isDone: boolean) => {},
+  getValidTasks: () => [],
+  resetAllTasks: () => {},
+};
+
+const TaskContext = createContext<ITaskContext>(initialValues);
 
 const TaskProvider: React.FC<React.ReactNode> = ({ children }) => {
   const {
@@ -16,7 +38,7 @@ const TaskProvider: React.FC<React.ReactNode> = ({ children }) => {
     updateToDone,
     getValidTasks,
     resetAllTasks,
-  } = useTasks();
+  } = useTasks(initialValues.tasks);
 
   return (
     <TaskContext.Provider

@@ -18,7 +18,7 @@ import {
   Animation,
   Navbar,
 } from '../components';
-import { useWindowSize } from '../context/hooks';
+import { useWindowSize, useAnimation } from '../context/hooks';
 import { useTheme } from 'styled-components';
 import { ThemeType } from '../themes';
 import { ModalContext, StageContext, TaskContext, TimerContext, AnimationContext } from '../context';
@@ -33,37 +33,29 @@ export const Home = () => {
   const {
     time,
     timeSleep,
+    handleStartTimer,
+    handleStartTimerSleep,
+    resetCountdown,
+    resetCountdownSleep,
+    handleDone,
+    handleDoneSleep,
     openModalTimer,
     openModalTimerSleep,
-    onChangeTime,
-    onChangeTimeSleep,
     onConfirmTime,
     onConfirmTimeSleep,
     onKeyDownTime,
     onKeyDownTimeSleep,
-    resetCountdown,
-    resetCountdownSleep,
-    handleStartTimer,
-    handleStartTimerSleep,
+    onChangeTime,
+    onChangeTimeSleep,
   } = useContext(TimerContext) as ITimerContext;
   const { MODAL_TYPE, modalType, setModalType, toggle, isShown } = useContext(ModalContext) as IModalContext;
-  const { stage, setStage, STAGES } = useContext(StageContext) as IStageContext;
+  const { stage, STAGES } = useContext(StageContext) as IStageContext;
   const { animation } = useContext(AnimationContext) as IAnimationContext;
   const [selectedSwitch, setSelectedSwitch] = useState(SELECTED_SWITCH['TIMER']);
   const [taskName, setTaskName] = useState('');
   const [error, setError] = useState(false);
-  const {
-    tasks,
-    currentTask,
-    createTask,
-    jumpTask,
-    deleteTask,
-    editTask,
-    clearTasks,
-    updateToDone,
-    getValidTasks,
-    resetAllTasks,
-  } = useContext(TaskContext) as ITaskContext;
+  const { tasks, currentTask, createTask, jumpTask, deleteTask, editTask, clearTasks, getValidTasks, resetAllTasks } =
+    useContext(TaskContext) as ITaskContext;
   const { windowDimensions } = useWindowSize();
   const theme = useTheme() as ThemeType;
 
@@ -134,28 +126,35 @@ export const Home = () => {
     }
   };
 
-  const handleDone = () => {
-    // resetCountdown();
-    if (!!currentTask) {
-      updateToDone(currentTask, true);
-      jumpTask();
-      setStage(STAGES['SLEEP_START']);
-    }
-  };
-  
-  const handleDoneSleep = () => {
-    setStage(STAGES['START']);
-    resetCountdownSleep();
-  }
-
   const chooseLayout = (value: string) => {
     const { width } = windowDimensions;
     return width > 1024 || value === selectedSwitch;
   };
 
-  useEffect(() => {
-    console.log({stage});
-  },[stage]);
+  const handleStageSubtitle = useMemo(() => {
+    switch (stage) {
+      case STAGES['START']:
+        return <Subtitle>Tarefa Atual</Subtitle>;
+      case STAGES['RUNNING']:
+        return <Subtitle>Tarefa Atual</Subtitle>;
+      case STAGES['FINISHED_WORK']:
+        return <Subtitle>Tarefa Atual</Subtitle>;
+      case STAGES['SLEEP_START']:
+        return <Subtitle>Próxima Tarefa</Subtitle>;
+      case STAGES['SLEEPING']:
+        return <Subtitle>Próxima Tarefa</Subtitle>;
+      case STAGES['FINISHED_SLEEP']:
+        return <Subtitle>Próxima Tarefa</Subtitle>;
+    }
+  }, [
+    handleStartTimer,
+    handleStartTimerSleep,
+    handleDone,
+    handleDoneSleep,
+    resetCountdown,
+    resetCountdownSleep,
+    stage,
+  ]);
 
   const handleStageTitle = useMemo(() => {
     switch (stage) {
@@ -172,9 +171,17 @@ export const Home = () => {
       case STAGES['FINISHED_SLEEP']:
         return <Title>Mais uma?</Title>;
     }
-  }, [handleStartTimer, handleStartTimerSleep, handleDone, handleDoneSleep,  resetCountdown, resetCountdownSleep, stage]);
+  }, [
+    handleStartTimer,
+    handleStartTimerSleep,
+    handleDone,
+    handleDoneSleep,
+    resetCountdown,
+    resetCountdownSleep,
+    stage,
+  ]);
 
-  const TimerStages = useMemo(() => {
+  const timerStages = useMemo(() => {
     switch (stage) {
       case STAGES['SLEEP_START']:
         return (
@@ -206,7 +213,7 @@ export const Home = () => {
       default:
         return <Timer minutes={minutes} seconds={seconds} onClick={openModalTimer} />;
     }
-  }, [stage, time, timeSleep]);
+  }, [stage, time, timeSleep, onConfirmTime]);
 
   const handleModalType = useMemo(() => {
     switch (modalType) {
@@ -247,7 +254,7 @@ export const Home = () => {
           </Content>
         );
     }
-  }, [modalType]);
+  }, [modalType, time, onConfirmTime]);
 
   const handleModalTypeTitle = useMemo(() => {
     switch (modalType) {
@@ -372,7 +379,15 @@ export const Home = () => {
           </Content>
         );
     }
-  }, [handleStartTimer, handleStartTimerSleep, handleDone, handleDoneSleep,  resetCountdown, resetCountdownSleep, stage]);
+  }, [
+    handleStartTimer,
+    handleStartTimerSleep,
+    handleDone,
+    handleDoneSleep,
+    resetCountdown,
+    resetCountdownSleep,
+    stage,
+  ]);
 
   return (
     <Container>
@@ -390,7 +405,7 @@ export const Home = () => {
             {handleStageTitle}
             {currentTask ? (
               <Content p="3rem 0" width="100%">
-                <Subtitle>Tarefa Atual</Subtitle>
+                {handleStageSubtitle}
                 <Task task={currentTask} currentTask={currentTask}>
                   <Content display="flex" position="absolute" right="16px">
                     {getValidTasks().length > 1 && (
@@ -420,7 +435,7 @@ export const Home = () => {
               </Content>
             )}
           </Content>
-          {TimerStages}
+          {timerStages}
           {handleStageButtons}
         </Box>
       )}
