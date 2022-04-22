@@ -1,9 +1,10 @@
 import { Task, Content, Button, Modal, ConfirmationModal, Input } from '../../components';
-import { IModalContext, ITask } from '../../interfaces';
+import { ITask } from '../../interfaces';
 import { useModal } from '../../context/hooks';
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { AnimatedList } from 'react-animated-list';
-import { ModalContext } from '../../context';
+import { useTheme } from 'styled-components';
+import { ThemeType } from '../../themes';
 
 type TaskListProps = {
   tasks: ITask[];
@@ -32,6 +33,8 @@ export const TaskList: React.FC<TaskListProps> = ({ tasks, currentTask, deleteTa
   const [taskName, setTaskName] = useState<string>('');
   const { isShown, toggle } = useModal(initialValues);
   const [modalType, setModalType] = useState<string>(MODAL_TYPE['DELETE']);
+  const theme = useTheme() as ThemeType;
+
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTaskName(e.target.value);
@@ -100,6 +103,7 @@ export const TaskList: React.FC<TaskListProps> = ({ tasks, currentTask, deleteTa
                 height="35px"
                 mIcon="0 0 0 .25rem"
                 icon="fas fa-pen"
+                bg={task === currentTask ? `${theme.colors.running}` : ''}
                 onClick={() => handleEdit(task)}
               />
               <Button
@@ -107,6 +111,7 @@ export const TaskList: React.FC<TaskListProps> = ({ tasks, currentTask, deleteTa
                 height="35px"
                 mIcon="0 0 0 .25rem"
                 icon="fas fa-trash"
+                bg={task === currentTask ? `${theme.colors.running}` : ''}
                 onClick={() => handleDelete(task)}
               />
             </Content>

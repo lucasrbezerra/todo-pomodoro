@@ -25,8 +25,12 @@ const DisplayItem = styled.div<DisplayItemProps | ColorsProps>`
     height: 70px;
   }
   @media screen and (min-width: 768px) and (max-width: 992px) {
+    width: 75px;
+    height: 75px;
   }
   @media screen and (min-width: 992px) and (max-width: 1200px) {
+    width: 80px;
+    height: 80px;
   }
   @media screen and (min-width: 1200px) and (max-width: 1400px) {
   }
@@ -39,8 +43,19 @@ const ValueDisplay = styled.h1`
   font-family: 'Rajdhani', sans-serif;
   font-weight: 600;
   color: ${({ theme }) => theme.colors.light};
-  @media (max-width: 767px) {
+  @media screen and (max-width: 576px) {
     font-size: calc(${({ theme }) => theme.fontSizes.display} - 1.5rem);
+  }
+  @media screen and (min-width: 576px) and (max-width: 768px) {
+    font-size: calc(${({ theme }) => theme.fontSizes.display} - 1.5rem);
+  }
+  @media screen and (min-width: 768px) and (max-width: 992px) {
+    font-size: calc(${({ theme }) => theme.fontSizes.display} - 1rem);
+  }
+  @media screen and (min-width: 992px) and (max-width: 1200px) {
+    font-size: calc(${({ theme }) => theme.fontSizes.display} - 1.2rem);
+  }
+  @media screen and (min-width: 1200px) and (max-width: 1400px) {
   }
 `;
 

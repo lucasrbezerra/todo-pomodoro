@@ -5,20 +5,24 @@ import { IAnimationContext } from '../interfaces';
 const initialValues = {
   animation: false,
   setAnimation: () => {},
-  notifyMe: () => {},
-}
+  notifyWork: () => {},
+  notifySleep: () => {},
+  toogleAnimation: () => {},
+};
 
 const AnimationContext = createContext<IAnimationContext>(initialValues);
 
 const AnimationProvider: React.FC<React.ReactNode> = ({ children }) => {
-  const { animation, setAnimation, notifyMe } = useAnimation();
+  const { animation, setAnimation, notifyWork, notifySleep, toogleAnimation } = useAnimation(initialValues);
 
   return (
     <AnimationContext.Provider
       value={{
         animation,
         setAnimation,
-        notifyMe,
+        notifyWork,
+        notifySleep,
+        toogleAnimation,
       }}
     >
       {children}

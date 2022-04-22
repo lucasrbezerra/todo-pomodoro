@@ -18,7 +18,7 @@ import {
   Animation,
   Navbar,
 } from '../components';
-import { useWindowSize, useAnimation } from '../context/hooks';
+import { useWindowSize } from '../context/hooks';
 import { useTheme } from 'styled-components';
 import { ThemeType } from '../themes';
 import { ModalContext, StageContext, TaskContext, TimerContext, AnimationContext } from '../context';
@@ -131,20 +131,37 @@ export const Home = () => {
     return width > 1024 || value === selectedSwitch;
   };
 
+  const chooseColorSubtitle = () => {
+    switch (stage) {
+      case STAGES['START']:
+        return theme.colors.running;
+      case STAGES['RUNNING']:
+        return theme.colors.running;
+      case STAGES['FINISHED_WORK']:
+        return theme.colors.running;
+      case STAGES['SLEEP_START']:
+       return theme.colors.next;
+      case STAGES['SLEEPING']:
+       return theme.colors.next;
+      case STAGES['FINISHED_SLEEP']:
+       return theme.colors.next;
+    }
+  }
+
   const handleStageSubtitle = useMemo(() => {
     switch (stage) {
       case STAGES['START']:
-        return <Subtitle>Tarefa Atual</Subtitle>;
+        return <Subtitle color={chooseColorSubtitle()}>Tarefa Atual</Subtitle>;
       case STAGES['RUNNING']:
-        return <Subtitle>Tarefa Atual</Subtitle>;
+        return <Subtitle color={chooseColorSubtitle()}>Tarefa Atual</Subtitle>;
       case STAGES['FINISHED_WORK']:
-        return <Subtitle>Tarefa Atual</Subtitle>;
+        return <Subtitle color={chooseColorSubtitle()}>Tarefa Atual</Subtitle>;
       case STAGES['SLEEP_START']:
-        return <Subtitle>Próxima Tarefa</Subtitle>;
+        return <Subtitle color={chooseColorSubtitle()}>Próxima Tarefa</Subtitle>;
       case STAGES['SLEEPING']:
-        return <Subtitle>Próxima Tarefa</Subtitle>;
+        return <Subtitle color={chooseColorSubtitle()}>Próxima Tarefa</Subtitle>;
       case STAGES['FINISHED_SLEEP']:
-        return <Subtitle>Próxima Tarefa</Subtitle>;
+        return <Subtitle color={chooseColorSubtitle()}>Próxima Tarefa</Subtitle>;
     }
   }, [
     handleStartTimer,
@@ -414,6 +431,7 @@ export const Home = () => {
                         height="25px"
                         label="Pular"
                         icon="fas fa-angle-double-right"
+                        bg={`${theme.colors.running}`}
                         onClick={handleNext}
                       />
                     )}

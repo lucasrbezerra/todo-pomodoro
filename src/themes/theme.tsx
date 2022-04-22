@@ -16,8 +16,9 @@ const light = '#DEE2EC';
 const opacity = '#c4c4c4';
 const shadow = '#202024';
 const success = '#53a653';
-const running = '#d2d5e3';
 const failure = '#A82E2E';
+const running = '#8d4be2';
+const next = '#6080D1';
 const sleepPrimary = '#662e5f';
 const sleepSecondary = '#994568';
 
@@ -37,7 +38,8 @@ const theme = {
     running,
     failure,
     sleepPrimary,
-    sleepSecondary
+    sleepSecondary,
+    next,
   },
 };
 

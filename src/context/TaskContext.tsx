@@ -12,8 +12,8 @@ const getStorage = (key: string) => {
 };
 
 const initialValues = {
-  tasks: getStorage('tasks'),
-  currentTask: getStorage('tasks')[0],
+  tasks: getStorage('tasks') || [],
+  currentTask: getStorage('tasks') ? getStorage('tasks')[0] : '',
   createTask: (taskName: string) => {},
   jumpTask: () => {},
   deleteTask: (taskId: number) => {},

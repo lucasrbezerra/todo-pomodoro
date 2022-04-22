@@ -1,12 +1,13 @@
 import { useContext, useEffect, useState } from 'react';
-import { ModalContext, StageContext, StorageContext, TaskContext } from '../../context';
-import { IModalContext, IStageContext, IStorageContext, ITaskContext } from '../../interfaces';
+import { AnimationContext, ModalContext, StageContext, StorageContext, TaskContext } from '../../context';
+import { IAnimationContext, IModalContext, IStageContext, IStorageContext, ITaskContext } from '../../interfaces';
 
 export const useTimer = (DEFAULT_TIMER: number, DEFAULT_TIMER_SLEEP: number) => {
   const { stage, setStage, STAGES } = useContext(StageContext) as IStageContext;
   const { setTimeStorage, setTimeSleepStorage } = useContext(StorageContext) as IStorageContext;
   const { setModalType, toggle, MODAL_TYPE } = useContext(ModalContext) as IModalContext;
   const { currentTask, jumpTask, updateToDone } = useContext(TaskContext) as ITaskContext;
+  const { toogleAnimation, notifyWork, notifySleep } = useContext(AnimationContext) as IAnimationContext;
 
   let countdownTimeout: NodeJS.Timeout;
   let countdownTimeoutSleeping: NodeJS.Timeout;
@@ -23,12 +24,16 @@ export const useTimer = (DEFAULT_TIMER: number, DEFAULT_TIMER_SLEEP: number) => 
       }, 1000);
     } else if (stage === STAGES['RUNNING'] && time === 0) {
       setStage(STAGES['FINISHED_WORK']);
+      toogleAnimation();
+      notifyWork();
     } else if (stage === STAGES['SLEEPING'] && timeSleep > 0) {
       countdownTimeoutSleeping = setTimeout(() => {
         setTimeSleep(timeSleep - 1);
       }, 1000);
     } else if (stage === STAGES['SLEEPING'] && timeSleep === 0) {
       setStage(STAGES['FINISHED_SLEEP']);
+      toogleAnimation();
+      notifySleep();
     }
   }, [stage, time, timeSleep]);
 
@@ -107,7 +112,7 @@ export const useTimer = (DEFAULT_TIMER: number, DEFAULT_TIMER_SLEEP: number) => 
 
   const resetCountdownSleep = () => {
     clearTimeout(countdownTimeoutSleeping);
-    setTime(DEFAULT_TIMER);
+    setTime(auxTime);
     setTimeSleep(auxTimeSleep);
     setStage(STAGES['START']);
   };

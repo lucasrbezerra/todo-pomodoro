@@ -105,7 +105,7 @@ export const InputTime: React.FC<IInputProps> = ({ value, onChange, error, onKey
           border={error ? `1px solid ${theme.colors.failure}` : `1px solid ${theme.colors.light}`}
         />
       </Content>
-      <Dots />
+      <Dots height="0.35rem" width="0.35rem"/>
       <Content display="flex" alignItems="center" m="0 .25rem" justifyContent="center">
         <CustomInput
           autoFocus={false}

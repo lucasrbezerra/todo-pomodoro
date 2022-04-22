@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const Box = styled.div`
-  width: 550px;
+  width: 500px;
   height: 500px;
   margin: 0 1rem;
   background: ${({ theme }) => theme.colors.bgBox};
@@ -24,7 +24,13 @@ export const Box = styled.div`
     height: 70%;
   }
   @media screen and (min-width: 992px) and (max-width: 1200px) {
+    margin: 0;
+    flex-basis: 40%;
+    height: 70%;
   }
   @media screen and (min-width: 1200px) and (max-width: 1400px) {
+    /* margin: 0;
+    flex-basis: 40%;
+    height: 80%; */
   }
 `;
