@@ -18,12 +18,15 @@ const WrapperNavbar = styled.div`
   }
   @media screen and (min-width: 576px) and (max-width: 768px) {
     margin-bottom: 0;
+    margin-top: 1.5rem;
   }
   @media screen and (min-width: 768px) and (max-width: 992px) {
     margin-bottom: 0;
+    margin-top: 1.5rem;
   }
   @media screen and (min-width: 992px) and (max-width: 1200px) {
     margin-top: 0.5rem;
+    margin-top: 1rem;
   }
   @media screen and (min-width: 1200px) and (max-width: 1400px) {
   }

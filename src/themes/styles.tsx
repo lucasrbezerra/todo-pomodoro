@@ -9,4 +9,8 @@ export const GlobalStyles = createGlobalStyle<{ theme: ThemeType }>`
         box-sizing: border-box;
         font-family: 'Poppins', sans-serif;
     }
+    body {
+        height: 100%;
+        overflow-y: hidden;
+    }
 `;

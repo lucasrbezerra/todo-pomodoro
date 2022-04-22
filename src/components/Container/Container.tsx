@@ -1,31 +1,21 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  /* display: flex;
-  align-items: center;
-  justify-content: space-evenly; */
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-evenly;
-
-  /* display: grid;
-  grid-template-areas:
-    'switch switch'
-    'leftBox rightBox';
-
-  align-items: start;
-  justify-content: space-evenly; */
   height: 100vh;
   width: 100%;
+  overflow-y: scroll;
   background: linear-gradient(
     109.61deg,
     ${({ theme }) => theme.colors.backgroundPrimary} 36.22%,
     ${({ theme }) => theme.colors.backgroundSecondary} 99.34%
   );
   @media screen and (max-width: 576px) {
-    height: 100vh;
+    /* height: 100%; */
   }
   @media screen and (min-width: 576px) and (max-width: 768px) {
   }
