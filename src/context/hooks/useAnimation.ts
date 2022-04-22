@@ -4,9 +4,9 @@ import { IAnimationContext } from '../../interfaces';
 export const useAnimation = (initialValues: IAnimationContext) => {
   const [animation, setAnimation] = useState(initialValues.animation);
 
-  useEffect(() => {
-    Notification.requestPermission();
-  }, []);
+  // useEffect(() => {
+  //   Notification.requestPermission();
+  // }, []);
 
   const notifyWork = () => {
     if (!window.Notification) {
