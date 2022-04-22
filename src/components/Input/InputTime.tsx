@@ -56,18 +56,55 @@ export const InputTime: React.FC<IInputProps> = ({ value, onChange, error, onKey
     onChange(totalTime);
   }, [leftMinute, rightMinute, leftSecond, rightSecond]);
 
-  const handleChangeTime = (e: any, setter: any) => {
+  const handleChangeTime = (e: any, type: string, setter?: any) => {
     const { value, name } = e.target;
+    var nextfield;
 
-    if (value.length <= MAX_LENGTH) setter(value);
+    if (setter && value.length <= MAX_LENGTH) setter(value);
 
     const [, fieldIndex] = name.split('-');
 
     let fieldIntIndex = parseInt(fieldIndex, 10);
 
-    const nextfield = document.querySelector(`input[name=field-${fieldIntIndex + 1}]`);
+    if (type === 'right') {
+      nextfield = document.querySelector(`input[name=field-${fieldIntIndex + 1}]`);
+    } else if (type === 'left') {
+      nextfield = document.querySelector(`input[name=field-${fieldIntIndex - 1}]`);
+    }
 
     if (nextfield !== null) (nextfield as HTMLFormElement).focus();
+  };
+
+  const backspaceKeyUp = (e: any) => {
+    if (e.target.value === '') {
+      handleChangeTime(e, 'left');
+    }
+  };
+
+  const onKeyArrowUp = (event: React.KeyboardEvent<HTMLDivElement>): void => {
+    switch (event.key) {
+      case 'ArrowLeft':
+        // Left pressed
+        handleChangeTime(event, 'left');
+        break;
+      case 'ArrowRight':
+        // Right pressed
+        handleChangeTime(event, 'right');
+        break;
+      case 'ArrowUp':
+        // Up pressed
+        handleChangeTime(event, 'right');
+        break;
+      case 'ArrowDown':
+        // Down pressed
+        handleChangeTime(event, 'left');
+        break;
+      case 'Backspace':
+        backspaceKeyUp(event);
+        break;
+      default:
+        break;
+    }
   };
 
   const theme = useTheme() as ThemeType;
@@ -83,49 +120,57 @@ export const InputTime: React.FC<IInputProps> = ({ value, onChange, error, onKey
     >
       <Content display="flex" alignItems="center" m="0 .25rem" justifyContent="center">
         <CustomInput
+          pattern="\d*"
           autoFocus
           name="field-1"
           maxLength={MAX_LENGTH}
           placeholder="2"
           value={leftMinute}
-          onChange={(e) => handleChangeTime(e, setLeftMinute)}
+          onChange={(e) => handleChangeTime(e, 'right', setLeftMinute)}
+          onKeyUp={onKeyArrowUp}
           onKeyDown={onKeyDown}
           border={error ? `1px solid ${theme.colors.failure}` : `1px solid ${theme.colors.light}`}
         />
       </Content>
       <Content display="flex" alignItems="center" m="0 .25rem" justifyContent="center">
         <CustomInput
+          pattern="\d*"
           autoFocus={false}
           name="field-2"
           maxLength={MAX_LENGTH}
           placeholder="5"
           value={rightMinute}
-          onChange={(e) => handleChangeTime(e, setRightMinute)}
+          onChange={(e) => handleChangeTime(e, 'right', setRightMinute)}
+          onKeyUp={onKeyArrowUp}
           onKeyDown={onKeyDown}
           border={error ? `1px solid ${theme.colors.failure}` : `1px solid ${theme.colors.light}`}
         />
       </Content>
-      <Dots height="0.35rem" width="0.35rem"/>
+      <Dots height="0.35rem" width="0.35rem" />
       <Content display="flex" alignItems="center" m="0 .25rem" justifyContent="center">
         <CustomInput
+          pattern="\d*"
           autoFocus={false}
           name="field-3"
           maxLength={MAX_LENGTH}
           placeholder="0"
           value={leftSecond}
-          onChange={(e) => handleChangeTime(e, setLeftSecond)}
+          onChange={(e) => handleChangeTime(e, 'right', setLeftSecond)}
+          onKeyUp={onKeyArrowUp}
           onKeyDown={onKeyDown}
           border={error ? `1px solid ${theme.colors.failure}` : `1px solid ${theme.colors.light}`}
         />
       </Content>
       <Content display="flex" alignItems="center" m="0 .25rem" justifyContent="center">
         <CustomInput
+          pattern="\d*"
           autoFocus={false}
           name="field-4"
           maxLength={MAX_LENGTH}
           placeholder="0"
           value={rightSecond}
-          onChange={(e) => handleChangeTime(e, setRightSecond)}
+          onChange={(e) => handleChangeTime(e, 'right', setRightSecond)}
+          onKeyUp={onKeyArrowUp}
           onKeyDown={onKeyDown}
           border={error ? `1px solid ${theme.colors.failure}` : `1px solid ${theme.colors.light}`}
         />
