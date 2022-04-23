@@ -9,43 +9,43 @@ export const useAnimation = (initialValues: IAnimationContext) => {
   // }, []);
 
   const notifyWork = () => {
-    if (!window.Notification) {
-      alert('Browser does not support notifications.');
-    } else {
-      if (Notification.permission === 'granted') {
-        new Audio('/sound/public_notification.mp3').play();
-        // Android.showToast(toast);
-        // if (!!currentTask) {
-        //   new Notification('Tarefa finalizada!', {
-        //     body: `Você terminou: ${currentTask.task} (;`,
-        //   });
-        // } else {
-        //   new Notification('Timer finalizada!', {
-        //     body: `Chegou ao final o temporizador`,
-        //   });
-        // }
-      }
-    }
+    // if (!window.Notification) {
+    //   alert('Browser does not support notifications.');
+    // } else {
+    //   if (Notification.permission === 'granted') {
+    new Audio('/sound/success_notification.mp3').play();
+    // Android.showToast(toast);
+    // if (!!currentTask) {
+    //   new Notification('Tarefa finalizada!', {
+    //     body: `Você terminou: ${currentTask.task} (;`,
+    //   });
+    // } else {
+    //   new Notification('Timer finalizada!', {
+    //     body: `Chegou ao final o temporizador`,
+    //   });
+    // }
+    //   }
+    // }
   };
 
   const notifySleep = () => {
-    if (!window.Notification) {
-      alert('Browser does not support notifications.');
-    } else {
-      if (Notification.permission === 'granted') {
-        new Audio('/sound/public_notification.mp3').play();
-        // Android.showToast(toast);
-        // if (!!currentTask) {
-        //   new Notification('Tarefa finalizada!', {
-        //     body: `Você terminou: ${currentTask.task} (;`,
-        //   });
-        // } else {
-        //   new Notification('Timer finalizada!', {
-        //     body: `Chegou ao final o temporizador`,
-        //   });
-        // }
-      }
-    }
+    // if (!window.Notification) {
+    //   alert('Browser does not support notifications.');
+    // } else {
+    //   if (Notification.permission === 'granted') {
+    new Audio('/sound/public_notification.mp3').play();
+    // Android.showToast(toast);
+    // if (!!currentTask) {
+    //   new Notification('Tarefa finalizada!', {
+    //     body: `Você terminou: ${currentTask.task} (;`,
+    //   });
+    // } else {
+    //   new Notification('Timer finalizada!', {
+    //     body: `Chegou ao final o temporizador`,
+    //   });
+    // }
+    //   }
+    // }
   };
   const toogleAnimation = () => {
     setAnimation(true);
