@@ -97,7 +97,7 @@ export const Navbar: React.FC<INavbar> = ({ handleClear, handleChangeTime, reset
     <WrapperNavbar>
       <ButtonActions label="Limpar" icon="fas fa-broom" onClick={handleClear} />
       <ButtonActions label="Reiniciar" icon="fas fa-redo" onClick={resetAllTasks} />
-      <ButtonActions label="Tempo" icon="fas fa-user-clock" onClick={handleChangeTime} />
+      <ButtonActions label="Trabalho" icon="fas fa-user-clock" onClick={handleChangeTime} />
       <ButtonActions label="Descanso" icon="fas fa-bed" onClick={handleChangeTimeSleep} />
     </WrapperNavbar>
   );

@@ -87,9 +87,10 @@ export const useTimer = (DEFAULT_TIMER: number, DEFAULT_TIMER_SLEEP: number) => 
 
   const onConfirmTimeSleep = () => {
     clearTimeout(countdownTimeoutSleeping);
-    setTimeSleepStorage(auxTimeSleep);
-    setTime(auxTime);
     setTimeSleep(auxTimeSleep);
+    setTimeSleepStorage(auxTimeSleep);
+    // clearTimeout(countdownTimeout);
+    // setTime(auxTime);
     toggle();
   };
 
